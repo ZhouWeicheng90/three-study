@@ -32,7 +32,7 @@
 }
 canvas {
   border: 1px solid #eee;
-  width: 500px;
-  height: 500px;
+  width: 800px;
+  height: 750px;
 }
 </style>

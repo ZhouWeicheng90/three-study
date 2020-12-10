@@ -1,5 +1,5 @@
 <template>
-  <canvas ref="cvs" class="cvs"></canvas>
+  <canvas ref="cvs"></canvas>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
   methods: {
     /**
      * -x 轴添加一个八面体
-     ** 材质（material，包含颜色，贴图，透明度等信息）
+     ** 材质（material，包含颜色，贴图，透明度等信息）是一种着色器，材质也包含光照算法
      ** 和形状（geometry，形状和尺寸等信息）
      ** 定义任何模型（mesh）都是先定义材质和形状，然后 new THREE.Mesh(geometry, material)，融合二者产生mesh。
      ** 最后将mesh加入到scene中！
@@ -46,11 +46,9 @@ export default {
      * 中心处添加一个二十面体
      */
     addIcosa(scene) {
-      const material = new THREE.MeshLambertMaterial({
-        color: 0x862f0a,
-        transparent: true,
-        opacity: 0.7
-      });
+
+      const material = new THREE.MeshPhysicalMaterial();
+      
       const geometry = new THREE.IcosahedronGeometry(50);
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
@@ -74,12 +72,11 @@ export default {
       return mesh;
     },
     /**
-     * +z 轴上添加一个高亮的球。
-     * 注意，这里构建材质的方式变了：
+     * +z 轴上添加一个高亮的球。注意，这里构建材质的方式变了。
      ** MeshBasicMaterial 与光照无反应，基础网格材质。
-     ** MeshLambertMaterial() 与光照有反应，实现漫反射进行渲染。
-     ** MeshPhongMaterial() 模拟镜面反射实现高光【定义高亮（所有光反射可概括为：漫反射，镜面反射。高亮就是镜面反射的主要体现）】
-     ** MeshStandardMaterial 相比较高光Phong材质可以更好的模拟金属、玻璃等效果。PBR物理材质。
+     ** MeshLambertMaterial 与光照有反应，实现漫反射进行渲染。
+     ** MeshPhongMaterial 既有漫反射，又有镜面反射，这里模拟镜面反射实现高光【定义高亮（所有光反射可概括为：漫反射，镜面反射。高亮就是镜面反射的主要体现）】
+     ** PBR物理材质，如 MeshStandardMaterial 相比较高光Phong材质可以更好的模拟金属、玻璃等效果。。
      ** 高光关键参数：specular 高光颜色,会与光照颜色分量相乘，shininess 定义高光的强度的系数
      */
     addSphere(scene) {
@@ -87,7 +84,7 @@ export default {
       const material = new THREE.MeshPhongMaterial({
         color: 0x443289,
         specular: 0x4488ee,
-        shininess: 9
+        shininess: 16
       });
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
@@ -149,7 +146,6 @@ export default {
   },
   mounted() {
     const scene = this.initScene();
-
     /* -------------------------------------------定义相机 和 render：------------------------------------------------------------------------ */
     const canvasW = this.$refs.cvs.clientWidth;
     const canvasH = this.$refs.cvs.clientHeight;
@@ -204,17 +200,11 @@ export default {
     // 中间滚动：缩放
     console.log(controls);
     // controls.addEventListener("change", customRender);  // 一旦change，就重新渲染
-    // 注意，上面一句要去掉，不要同时使用 change 和 requestAnimationFrame，没有这个必要。（相机参数改了，下个raf自动渲染，没有必要监听change）
-
-    // 辅助坐标系  参数250表示坐标系大小，可以根据场景大小去设置  ----- 辅助坐标系必须在 camera和scene关联起来后使用！
-    var axisHelper = new THREE.AxisHelper(canvasH);
-    scene.add(axisHelper);
+    // 注意，上面一句要去掉，不要同时使用 change 和 requestAnimationFrame，没有这个必要。（相机参数改了，下个raf自动渲染，没有必要监听change）      
+    
   }
 };
 </script>
 <style scoped>
-.cvs {
-  width: 700px;
-  height: 750px;
-}
+
 </style>
