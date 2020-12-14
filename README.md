@@ -21,15 +21,151 @@
 
 ## API总览
 
-### 基础（封装好的）
+### 基础
+
+#### copy、clone
+
+```js
+// A.copy(B)  把B对象的属性值赋值给A对象
+// N = M.clone()   返回一个和M相同的对象赋值给N
+
+Vector3
+Material
+Geometry
+Object3D
+
+// 当拷贝一个模型时，模型的 geometry和material是浅拷贝，修改geometry所有拷贝一起变化！
+```
+
+#### Group层级关系
+
+``` js
+group.add(mesh);
+group.add(light)
+group.add(group2);
+scene.add(group);
+// scene和group都有一个children属性，可以查看所有add进去的对象，包括axisHelper、light、group等, —— 层级关系。
+
+
+// 可以add多个，与add对应的remove也可以写多个
+scene.add(group1,group2);
+scene.remove(group1,group2);
+```
+
+```js
+// name 命名模型
+group.add(Mesh)
+Mesh.name = "眼睛"
+group.name = "头"
+
+scene.traverse(obj => {
+  console.log(obj.id, obj.name);   // id,name
+});
+
+var idNode = scene.getObjectById( 4 );    // getObjectById   id是只读的数字，所以这个方法很少用吧！
+var nameNode = scene.getObjectByName( "eye" );  // getObjectByName
+```
+
+#### 本地与世界（相对与绝对）
+
+##### 坐标
+
+设置的position属性都是本地位置坐标！本地坐标position 是相对于父模型的坐标，表示了子对象相对于父对象的偏移量。
+
+还有世界位置坐标
+
+```js
+let buf = new THREE.Vector3();
+let buf2 = g1.getWorldPosition(buf);    // 获取一个Object3D的世界坐标（注意:Object3D、必须传入一个target接收坐标）
+console.log(buf === buf2, buf);  // 返回的 就是 传入的
+
+
+mesh.position.set(50, 0, 0);
+group.position.set(50, 0, 0);
+group.add(mesh);
+console.log('世界坐标',mesh.getWorldPosition(new THREE.Vector3()));  // (100,0,0)
+// 一个模型的世界坐标系的坐标值 就是 该模型对象所有父对象以及模型本身位置属性.position的叠加。
+```
+
+##### 缩放
+
+```js
+.getWorldScale()  // 略
+```
+
+##### 矩阵
+
+```js
+console.log(g1.matrix, g1.matrixWorld);
+// matrix  本地的 变换矩阵（缩放，旋转，平移 的综合矩阵）
+// matrixWorld  世界的 变换矩阵
+```
+
+
+
+#### 顶层
+
+``` js
+Scene
+OrthographicCamera       // Ortho graphic 正交投影
+WebGLRenderer
+	render.render(scene, camera);  
+	const render = new THREE.WebGLRenderer({ canvas: this.$refs.cvs });
+    const camera = new THREE.OrthographicCamera(-canvasW / 2,canvasW / 2,canvasH / 2,-canvasH / 2,1,1000);
+	camera.position.set(200, 300, 200);
+    camera.lookAt(scene.position);
+    render.setSize(canvasW, canvasH);
+    render.setClearColor(0xb9d3ff, 1);
+
+AxesHelper  
+
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+```
+
+### 模型与材质
 
 ```js
 Mesh
+SkinnedMesh  // 骨骼网格模型
 Points
 Line
-LineSegments   // 未使用
-LineLoop    // 未使用
+LineSegments   // 线片段，各线是不相连的，1-2  3-4  5-6 这样2跟3不会相连……，未使用
+LineLoop    // 封闭的，最后一个点会和第一个点相连，未使用
+Sprite  // 精灵模型，未使用
+	mesh.position.set(0, 0, 200);
+	
 
+
+
+PointsMaterial  （size属性）
+LineBasicMaterial
+LineDashedMaterial
+MeshBasicMaterial 
+MeshLambertMaterial
+  
+MeshPhongMaterial
+   specular属性 为高光专有属性
+【PBR】MeshPhysicalMaterial   // 未使用
+【PBR】MeshStandardMaterial   // 未使用
+MeshDepthMaterial   // 未使用  深度材质。？？？
+MeshNormalMaterial   // 未使用  法向量材质。？？？
+SpriteMaterial    // 未使用  精灵材质
+ShaderMaterial 和 RawShaderMaterial  // 未使用 自定义材质
+
+共用属性：
+   side: DoubleSide、BackSide 默认FrontSide
+   opacity和transparent
+   
+   vertexColors: VertexColors (默认NoColors)   // 采用顶点颜色 （当值为 NoColors（默认）时，采用color属性，直接定义所有顶点颜色）
+   color // 注意color和vertextColors的关系
+   
+   wireframe  //
+```
+
+### 形状（坐标，颜色，【法向量】）
+
+
+```js
 
 OctahedronGeometry
 DodecahedronGeometry
@@ -40,37 +176,10 @@ SphereGeometry
 CylinderGeometry
 // 基本上所有的形状都有对应的buffer类型，两种不同的实现而已。buffer类型数据放在了 attributes.position（color,normal)，index中, 普通类型则放在了 vertices faces（或colors）中
 
-PointsMaterial
-LineBasicMaterial
-MeshLambertMaterial
-MeshPhysicalMaterial   // 未使用
-MeshPhongMaterial
-MeshBasicMaterial 
-   side: DoubleSide
-   vertexColors: VertexColors    // 采用顶点颜色 （当值为 NoColors（默认）时，采用color属性，直接定义所有顶点颜色）
-   
-
-PointLight
-AmbientLight
-SpotLight   // 未使用
-DirectionalLight    // 未使用
 
 
-Scene
-OrthographicCamera       // Ortho graphic 正交投影
-WebGLRenderer
-
-AxisHelper  // 使用了，但无d.ts
-
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-```
-
-### 自定义形状（坐标，颜色，【法向量】）
-
-
-```js
 BufferGeometry
-BufferAttribute    // 设置顶点坐标 、颜色、法向量、索引 的。
+BufferAttribute 【类型】   // 设置顶点坐标 、颜色、法向量、索引 的。
     geometry.attributes.color
     geometry.attributes.position
     geometry.attributes.normal   // 顶点法向量，不明白！
@@ -80,21 +189,24 @@ BufferAttribute    // 设置顶点坐标 、颜色、法向量、索引 的。
 
 // 仅下面三个 不适合构建mesh，只能构建line 和point 模型：
 Geometry  
+Vector3【类型】  // 矢量，同理还有 Vector2 Vector4
+Color【类型】   // 定义颜色: new Color(0xff00ff);
+// 要构建 mesh 必须借助 Face3，face定义法向量和三角形（只有mesh才有法向量的概念，face的颜色只用于mesh）
+Face3【类型】  // face 才有法向量!  下面法向量n也是一个Vector3
+
      geometry.vertices.push(p1, p2, p3);   // p是顶点，Vector类型
      geometry.colors.push(color1, color2, color3);  // 这样设置color对mesh无效，mesh的color必须通过face来设置
      // 以上的 点和颜色一一对应。
-Vector3  // 矢量，同理还有 Vector2 Vector4
-Color   // 定义颜色: new Color(0xff00ff);
+     geometry.faces.push(face)
 
-// 要构建 mesh 必须借助 Face3，face定义法向量和三角形（只有mesh才有法向量的概念，face的颜色只用于mesh）
-Face3  // face 才有法向量!  下面法向量n也是一个Vector3
-    new Face3(0, 1, 2);   // 构建一个三角形，采用索引为0,1,2的顶点。 注意：一个face就是一个三角形
-    face.vertexNormals.push(n1,n2,n3)  //通过设置三个顶点的法向量，来确定三角形的法向量。 或：
-    face.normal=n     // 直接设置三角形的法向量
+     new Face3(0, 1, 2);   // 构建一个三角形，采用索引为0,1,2的顶点。 注意：一个face就是一个三角形
+     face.vertexNormals.push(n1,n2,n3)  //通过设置三个顶点的法向量，来确定三角形的法向量。 或：
+     face.normal=n     // 直接设置三角形的法向量
 
-    face.color = color1   // 颜色1
-    face.vertexColors = [color1,color2,color3]   //颜色2
-    geometry.faces.push(face)
+     face.color = color1   // 颜色1
+     face.vertexColors = [color1,color2,color3]   //颜色2
+
+	 face.a  face.b  face.c  // 分别对应顶点1,2,3的索引   
 
 // Geometry类型比BufferGeometry类型更好使用，但前者最终都会转化成后者进行绘制
 // Threejs加载外部模型的时候，都解析为BufferGeometry，所以这个还是很重要的
@@ -103,14 +215,121 @@ Face3  // face 才有法向量!  下面法向量n也是一个Vector3
 
 颜色的插值计算 （渐变）。线中间的颜色 由线两端的颜色计算得到（均匀），三角形中间的颜色 由三个顶点处的颜色计算得到。
 
-### 材质
+
+
+
+
+
+
+### 光与阴影
+
+#### 各种光与helper
+
+```js
+PointLight  // PointLightHelper
+AmbientLight  // 没有helper
+SpotLight   // SpotLightHelper
+DirectionalLight    // DirectionalLightHelper
+// 基类是 Light （color默认#fff，intensity 强度默认1）
+ 	// helper使用示例：
+ 	scene.add(new THREE.DirectionalLightHelper(dLight, 20));
+	
+// 经过测试，directionalLight的target属性 似乎不太好用，设置position无效
+// 经过测试 平行光的helper好像没有什么用。展示的方向是错的，始终指向原点！
+```
+
+#### 颜色光照的原理
+
+```js
+// 漫反射数学模型RGB分量表示：(R2,G2,B2) = (R1,G1,B1) x (R0,G0,B0) x cosθ
+// 相乘的两种颜色分别为 材质颜色和光线颜色，Θ为入射角
+R2 = R1 * R0 * cosθ
+G2 = G1 * G0 * cosθ
+B2 = B1 * B0 * cosθ
+// 漫反射下，黑色的 永远是黑色的、蓝光照红mesh也是黑的……
+```
+
+#### 阴影
+
+```js
+// 使用阴影 （至少设置这四个属性，才能看到阴影）
+render.shadowMap.enabled = true;  // 注意！
+mesh.castShadow = true;
+planeMesh.receiveShadow = true;
+dLight.castShadow = true;
+
+// 要想使阴影看起来正确，还要设置一些列数据：引用官方：
+        // 设置计算阴影的区域，最好刚好紧密包围在对象周围
+        // 计算阴影的区域过大：模糊  过小：看不到或显示不完整
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 300;
+        directionalLight.shadow.camera.left = -50;
+        directionalLight.shadow.camera.right = 50;
+        directionalLight.shadow.camera.top = 200;
+        directionalLight.shadow.camera.bottom = -100;
+        // 设置mapSize属性可以使阴影更清晰，不那么模糊
+        // directionalLight.shadow.mapSize.set(1024,1024)
+
+// 光源的shadow属性：DirectionalLightShadow、PointLightShadow、SpotLightShadow
+// 三种类型的基类都是 LightShadow：
+lightShadow.camera // 观察光源的相机对象. 从光的角度来看，以相机对象的观察位置和方向来判断，其他物体背后的物体将处于阴影中。
+// 上方是平行光shadow的camera设置，spotLight的shadow设置如下：
+        spotLight.shadow.camera.near = 1;
+        spotLight.shadow.camera.far = 300;
+        spotLight.shadow.camera.fov = 20;
+
+lightShadow.mapSize   // 定义阴影纹理贴图宽高尺寸的一个二维向量Vector2.
+// 较高的值会以计算时间为代价提供更好的阴影质量
+
+.map  // 深度图
+```
+
+
+
+``` js
+
+```
+
+SpotLightShadow
+
+
 
 
 
 ### 变换
 
 ``` js
-scale translate rotateX rotateY rotateZ
+// scale translate rotateX rotateY rotateZ
 // 变换可以用于  geometry、mesh、scene……，作用的都是本身，改变的矩阵也是自身！！
+
+geometry.scale(2, 2, 2);
+geometry.translate(50, 0, 0);
+geometry.rotateX(Math.PI / 4);
+geometry.center();// 居中：偏移的几何体居中
+
+mesh.scale.set(0.5, 1.5, 2)
+mesh.scale.x = 2.0;
+mesh.position.set(80,2,10);
+mesh.position.y = 80;
+
+mesh.translateX(100);// 等价于mesh.position.x = mesh.position.x + 100;
+mesh.rotateX(Math.PI/4);//绕x轴旋转π/4
+mesh.rotateOnAxis(axis,Math.PI/8);//绕axis轴旋转π/8, axis不用归一化
+mesh.translateOnAxis(axis, 100); // 见下方示例！！！
+
+console.log(mesh.rotation);  // 打印角度信息
+```
+
+```js
+var axis = new THREE.Vector3(1, 1, 1);//向量Vector3对象表示方向
+axis.normalize(); //向量归一化
+mesh.translateOnAxis(axis, 100);//沿着axis轴表示方向平移100
+```
+
+```js
+// group和scene很像,group可以这样变换，scene也可以：
+group.translateY(100);
+group.rotateY(Math.PI/6)
+group.scale.set(4,4,4);
 ```
 

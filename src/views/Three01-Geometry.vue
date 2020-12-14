@@ -35,10 +35,8 @@ export default {
       render.setSize(canvasW, canvasH);
       render.setClearColor(0xb9d3ff, 1);
 
-      new OrbitControls(camera, this.$refs.cvs);
-
       // 辅助坐标系:
-      var axisHelper = new THREE.AxisHelper(canvasH);
+      var axisHelper = new THREE.AxesHelper(canvasH);
       scene.add(axisHelper);
 
       return { scene, camera, render };
@@ -206,7 +204,7 @@ export default {
     },
 
     /**
-     * 综合运用，添加三个模型(8个点，矩形，正方体的一部分)
+     * 操作内置的geometry，添加三个模型(8个点，矩形，正方体的一部分)
      */
     addGeometry4(scene) {
       let box = new THREE.BoxGeometry(400, 400, 400);
@@ -248,7 +246,7 @@ export default {
           new THREE.Color(0x00ffff)
         ];
       });
-      box2.faces.pop();     
+      box2.faces.pop();
       box2.faces.shift();
       scene.add(
         new THREE.Mesh(
@@ -288,13 +286,12 @@ export default {
     );
     scene.add(line);
     /* -------------------------------------------------------------------------------------------------------------- */
-
+    const constroller = new OrbitControls(camera, this.$refs.cvs);
     function customRender() {
-      render.render(scene, camera);
-      scene.rotateY(0.003);
-      window.requestAnimationFrame(customRender);
+      render.render(scene, camera);     
     }
     customRender();
+    constroller.addEventListener("change", customRender);
   }
 };
 </script>

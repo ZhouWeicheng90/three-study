@@ -47,8 +47,7 @@ export default {
      */
     addIcosa(scene) {
 
-      const material = new THREE.MeshPhysicalMaterial();
-      
+      const material = new THREE.MeshPhysicalMaterial();      
       const geometry = new THREE.IcosahedronGeometry(50);
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);

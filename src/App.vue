@@ -1,7 +1,10 @@
 <template>
   <div id="nav">
-    <router-link to="/">three能力概览</router-link>
-    <router-link to="/about">深入网格模型</router-link>
+    <router-link to="/Three00-Global">three能力概览</router-link>
+    <router-link to="/Three01-Geometry">Geometry</router-link>
+    <router-link to="/Three02-Shadow">阴影</router-link> 
+    <router-link to="/Example01">Example01</router-link> 
+       
   </div>
   <div>
     <router-view />
