@@ -3,7 +3,7 @@
     <router-link to="/Three00-Global">three能力概览</router-link>
     <router-link to="/Three01-Geometry">Geometry</router-link>
     <router-link to="/Three02-Shadow">阴影</router-link> 
-    <router-link to="/Example01">Example01</router-link> 
+    <router-link to="/Three03-model3d">3D建模</router-link> 
        
   </div>
   <div>

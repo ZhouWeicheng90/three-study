@@ -15,8 +15,8 @@ const routes = [
     component: () => import('../views/Three02-Shadow.vue')
   },
   {
-    path: '/Example01',  
-    component: () => import('../views/Example01.vue')
+    path: '/Three03-model3d',  
+    component: () => import('../views/Three03-model3d.vue')
   },
   
 ]

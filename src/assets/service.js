@@ -16,8 +16,8 @@ export function init(canvas, clearColor, addAxesHelper) {
     W / 2,
     H / 2,
     -H / 2,
-    1,
-    1000
+    -2000,
+    2000
   );
   camera.position.set(200, 300, 200);
   camera.lookAt(scene.position);
