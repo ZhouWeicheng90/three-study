@@ -2,9 +2,10 @@
   <div id="nav">
     <router-link to="/Three00-Global">three能力概览</router-link>
     <router-link to="/Three01-Geometry">Geometry</router-link>
-    <router-link to="/Three02-Shadow">阴影</router-link> 
-    <router-link to="/Three03-model3d">3D建模</router-link> 
-       
+    <router-link to="/Three02-Shadow">阴影</router-link>
+    <router-link to="/Three03-model3d">3D建模</router-link>
+    <router-link to="/Three04-Texture">纹理(基础)</router-link>
+    <router-link to="/Three05-Texture-notImage">纹理(非图片)</router-link>
   </div>
   <div>
     <router-view />

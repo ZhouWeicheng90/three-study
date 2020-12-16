@@ -31,5 +31,5 @@ export function init(canvas, clearColor, addAxesHelper) {
   }
   controller.addEventListener("change", customRender);
   Promise.resolve().then(customRender);
-  return { scene, camera, render };
+  return { scene, camera, render,renderFn:customRender };
 }

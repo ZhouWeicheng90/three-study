@@ -1,5 +1,4 @@
-<template>
-  <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
+<template>  
   <canvas ref="cvs"></canvas>
 </template>
 
@@ -215,7 +214,7 @@ export default {
       if (3 === type) {
         let mesh = new THREE.Mesh(
           geometry,
-          new THREE.MeshPhongMaterial({
+          new THREE.MeshLambertMaterial({
             color: 0x64a3d0,
             // wireframe: true,
             side: THREE.DoubleSide,

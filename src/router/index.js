@@ -17,6 +17,12 @@ const routes = [
   {
     path: '/Three03-model3d',  
     component: () => import('../views/Three03-model3d.vue')
+  }, {
+    path: '/Three04-Texture',  
+    component: () => import('../views/Three04-Texture.vue')
+  },{
+    path: '/Three05-Texture-notImage',  
+    component: () => import('../views/Three05-Texture-notImage.vue')
   },
   
 ]
