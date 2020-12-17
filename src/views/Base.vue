@@ -1,5 +1,4 @@
 <template>
-  <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
   <canvas ref="cvs"></canvas>
 </template>
 
@@ -7,6 +6,14 @@
 import * as THREE from "three";
 import { init } from "../assets/service.js";
 export default {
+  data() {
+    return {
+      componentActive: true
+    };
+  },
+  beforeUnmount() {
+    this.componentActive = false;
+  },
   methods: {},
   mounted() {
     const { scene } = init(this.$refs.cvs, 0xb9d3ff, false);

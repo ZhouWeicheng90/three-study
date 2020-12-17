@@ -7,6 +7,14 @@ import * as THREE from "three";
 // 注意鼠标操作 OrbitControls 这样引入了，注意 jsm ！：
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 export default {
+  data() {
+    return {
+      componentActive: true
+    };
+  },
+  beforeUnmount(){
+    this.componentActive=false
+  },
   methods: {
     /**
      * -x 轴添加一个八面体
@@ -143,6 +151,7 @@ export default {
       return scene;
     }
   },
+  
   mounted() {
     const scene = this.initScene();
     /* -------------------------------------------定义相机 和 render：------------------------------------------------------------------------ */
@@ -179,7 +188,10 @@ export default {
 
     // 将上面的一次绘制改造成匀速旋转的绘制：
     let t0 = Date.now();
-    function customRender() {
+    let customRender=()=> {
+      if(!this.componentActive){
+        return;
+      }  
       const t1 = Date.now();
       const t = t1 - t0;
       t0 = t1;

@@ -1,14 +1,17 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-export function init(canvas, clearColor, addAxesHelper) {
+export function init(canvas, clearColor, addAxesHelper, addController = true) {
   const scene = new THREE.Scene();
 
   const W = canvas.clientWidth;
   const H = canvas.clientHeight;
   const render = new THREE.WebGLRenderer({ canvas });
   render.setSize(W, H);
-  render.setClearColor(clearColor, 1);
+  if (null !== clearColor) {
+    render.setClearColor(clearColor, 1);
+  }
+
 
   //   how to she camera ？？？？
   const camera = new THREE.OrthographicCamera(
@@ -21,15 +24,17 @@ export function init(canvas, clearColor, addAxesHelper) {
   );
   camera.position.set(200, 300, 200);
   camera.lookAt(scene.position);
+  function customRender() {
+    render.render(scene, camera);
+  }
+  Promise.resolve().then(customRender);
 
   if (addAxesHelper) {
     scene.add(new THREE.AxesHelper(H));
   }
-  const controller = new OrbitControls(camera, canvas);
-  function customRender() {
-    render.render(scene, camera);
+  if (addController) {
+    const controller = new OrbitControls(camera, canvas);
+    controller.addEventListener("change", customRender);
   }
-  controller.addEventListener("change", customRender);
-  Promise.resolve().then(customRender);
-  return { scene, camera, render,renderFn:customRender };
+  return { scene, camera, render, renderFn: customRender };
 }

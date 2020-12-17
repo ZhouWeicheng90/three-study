@@ -1,37 +1,75 @@
 <template>
-  <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
   <canvas ref="cvs"></canvas>
+  <label class="btn" @click="useLightMap=!useLightMap">
+    使用阴影纹理
+    <input type="radio" v-show="useLightMap" checked disabled class="active" />
+    <input type="radio" v-show="!useLightMap" disabled class="deactive" />
+  </label>
+  <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
 </template>
 
 <script>
 import * as THREE from "three";
 import { init } from "../assets/service.js";
-
+var texture = new THREE.TextureLoader().load("/imgs/earth2.jpg");
 export default {
+  data() {
+    return {
+      componentActive: true,
+      useLightMap: false,
+      rafFns: []
+    };
+  },
+  beforeUnmount() {
+    this.componentActive = false;
+  },
   methods: {
     shadowExample() {
       const group = new THREE.Group();
-      var mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(40, 100, 40),
-        new THREE.MeshLambertMaterial({
-          color: 0x3e9cd6
-        })
-      );
+
+      const box = new THREE.BoxGeometry(40, 100, 40);
+      const boxMaterial = new THREE.MeshLambertMaterial({
+        color: 0x3e9cd6
+      });
+      var mesh = new THREE.Mesh(box, boxMaterial);
       group.add(mesh);
 
       //创建一个平面几何体作为投影面
-      var planeMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(300, 200),
-        new THREE.MeshLambertMaterial({
-          color: 0xffffff
-        })
-      );
-      planeMesh.rotateX(-Math.PI / 2);
-      planeMesh.position.y = -50;
-      planeMesh.scale.x = 2;
-      planeMesh.scale.y = 2;
+      let plane;
+      let planeMaterial;
+      let planeMesh;
+      this.rafFns.push(() => {
+        let flag = false;
+        if (this.useLightMap && (!planeMaterial||planeMaterial.lightMap !== texture)) {
+          console.log("start light Map");
+          flag = true;
+          plane = new THREE.PlaneGeometry(300, 200)
+          plane.faceVertexUvs[1] = plane.faceVertexUvs[0];
+          texture.needsUpdate=true;
+          planeMaterial = new THREE.MeshLambertMaterial({
+            color: 0xffffff,
+            lightMap: texture
+          });
+        } else if (!this.useLightMap && (!planeMaterial||planeMaterial.lightMap === texture)) {
+          console.log("close Light ==");
+          flag = true;
 
-      group.add(planeMesh);
+          plane = new THREE.PlaneGeometry(300, 200)
+          planeMaterial = new THREE.MeshLambertMaterial({
+            color: 0xffffff
+          });
+        }
+        if (flag) {
+          group.remove(planeMesh);
+          planeMesh = new THREE.Mesh(plane, planeMaterial);
+          planeMesh.rotateX(-Math.PI / 2);
+          planeMesh.position.y = -50;
+          planeMesh.scale.x = 2;
+          planeMesh.scale.y = 2;
+          planeMesh.receiveShadow = true;
+          group.add(planeMesh);
+        }
+      });
 
       // 添加光：
       let dLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -40,7 +78,6 @@ export default {
 
       mesh.castShadow = true;
       mesh.receiveShadow = true;
-      planeMesh.receiveShadow = true;
       dLight.castShadow = true;
 
       dLight.shadow.camera.near = -2000;
@@ -57,6 +94,7 @@ export default {
     copyExample() {
       const group = new THREE.Group();
       const g = new THREE.SphereGeometry(50, 100, 100);
+
       const m = new THREE.MeshLambertMaterial({
         color: 0x446782
       });
@@ -64,6 +102,7 @@ export default {
       const mesh = new THREE.Mesh(g, m);
       mesh.translateY(150);
       mesh.castShadow = true;
+
       const g2 = g.clone();
       const mesh2 = new THREE.Mesh(g2, m.clone());
       mesh2.translateY(150);
@@ -79,7 +118,7 @@ export default {
     }
   },
   mounted() {
-    const { scene, render, camera } = init(this.$refs.cvs, 0xb9d3ff, false);
+    const { scene, render, renderFn } = init(this.$refs.cvs, 0xb9d3ff, false);
     // console.log(camera)
     /* -------------------------------------------------------------------------------------------------------------- */
     render.shadowMap.enabled = true;
@@ -88,13 +127,19 @@ export default {
     scene.add(g1, g2);
     g1.translateX(+5);
     // scene.remove(g2)
-    function fTest() {
+    let fTest = () => {
+      if (!this.componentActive) {
+        return;
+      }
       // g1.rotateX(0.003);
       g2.rotateY(0.003);
-      render.render(scene, camera);
-      // scene.updateWorldMatrix(true)
+      this.rafFns.forEach(fn => {
+        fn();
+      });
+      renderFn();
+
       requestAnimationFrame(fTest);
-    }
+    };
     // let buf = new THREE.Vector3();
     // let buf2 = g1.getWorldPosition(buf);
     // console.log(buf === buf2, buf);
@@ -119,3 +164,14 @@ export default {
   }
 };
 </script>
+<style scoped>
+.btn {
+  cursor: pointer;
+  vertical-align: top;
+}
+.active {
+  border-color: black;
+  color: black;
+  background-color: black;
+}
+</style>

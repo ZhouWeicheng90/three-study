@@ -7,9 +7,42 @@ import * as THREE from "three";
 import { init } from "../assets/service.js";
 const url = "/imgs/earth.jpg";
 const url2 = "/imgs/earth2.jpg";
+const video = document.createElement("video");
+video.src = "/imgs/audio.ogv";
+function generateCanvas() {
+  var canvas = document.createElement("canvas");
+  canvas.style.width = "512px";
+  canvas.style.height = "128px";
+  canvas.width = 512;
+  canvas.height = 128;
+  var c = canvas.getContext("2d");
+  // 矩形区域填充背景
+  c.fillStyle = "#ffffff";
+  c.fillRect(0, 0, 512, 128);
+  c.beginPath();
+  // 文字
+  c.beginPath();
+  c.translate(256, 64);
+  c.fillStyle = "#000000"; //文本填充颜色
+  c.font = "bold 48px 宋体"; //字体样式设置
+  c.textBaseline = "middle"; //文本与fillText定义的纵坐标
+  c.textAlign = "center"; //文本居中(以fillText定义的横坐标)
+  c.fillText("Canvas 纹理", 0, 0);
+  return { canvas, ctx2D: c };
+}
 export default {
+  data() {
+    return {
+      componentActive: true,
+      rafFns: []
+    };
+  },
+  beforeUnmount() {
+    this.componentActive = false;
+    video.pause();
+  },
   methods: {
-    baseTexture(scene, renderFn) {
+    baseTexture(scene) {
       var textureLoader = new THREE.TextureLoader();
       const successFn = texture => {
         var material = new THREE.MeshLambertMaterial({
@@ -66,20 +99,22 @@ export default {
         const mesh2 = new THREE.Mesh(geo2, material);
         mesh2.position.set(100, 0, -100);
         scene.add(mesh2);
-        renderFn();
 
         // 可以动态设置模型的纹理，5s后：
         let currentUrl = url;
-        setInterval(() => {
+        let timmer = setInterval(() => {
+          if (!this.componentActive) {
+            clearInterval(timmer);
+            return;
+          }
           if (url === currentUrl) {
             currentUrl = url2;
           } else {
             currentUrl = url;
           }
           textureLoader.load(currentUrl, function(texture) {
-            mesh1.material.map = texture; // 设置球体网格模型材质的map属性
-            // mesh.material.needsUpdate = true; // （经过测试不设置也可以）告诉threejs渲染器系统，材质对象的map属性已更新，
-            renderFn();
+            material.map = texture; // 设置球体网格模型材质的map属性
+            // material.needsUpdate = true; // （经过测试不设置也可以）告诉threejs渲染器系统，材质对象的map属性已更新，
           });
         }, 2500);
       };
@@ -96,7 +131,40 @@ export default {
       //   successFn(texture)
       // });
     },
-    textureTransform(scene, renderFn) {
+    canvasTexture(scene) {
+      let { canvas } = generateCanvas();
+      var texture = new THREE.CanvasTexture(canvas);
+      var material = new THREE.MeshPhongMaterial({
+        map: texture // 设置纹理贴图
+      });
+      // console.log(texture.image);
+      var geometry = new THREE.PlaneGeometry(128, 32);
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(-200, 300, 40);
+      mesh.rotateY(Math.PI / 4);
+      mesh.scale.set(2, 2);
+      scene.add(mesh);
+    },
+    audioTexture(scene) {
+      this.$refs.cvs.onclick = () => {
+        video.play();
+      };
+      var texture = new THREE.VideoTexture(video);
+      // texture.minFilter = THREE.LinearFilter;
+      // texture.magFilter = THREE.LinearFilter;
+      // texture.format = THREE.RGBFormat;
+
+      var geometry = new THREE.PlaneGeometry(480, 204);
+      var material = new THREE.MeshLambertMaterial({
+        // emissive:0xffff00,
+        color: 0xffffff,
+        map: texture
+      });
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, -200, 300);
+      scene.add(mesh);
+    },
+    textureTransform(scene) {
       var geometry = new THREE.BoxBufferGeometry(20, 200, 300); //立方体
 
       var material_1 = new THREE.MeshLambertMaterial({
@@ -133,9 +201,8 @@ export default {
       var mesh = new THREE.Mesh(geometry, materialArr); //网格模型对象Mesh
       mesh.translateY(300);
       scene.add(mesh); //网格模型添加到场景中
-      renderFn();
     },
-    walkTube(scene, renderFn) {
+    walkTube(scene) {
       let line = new THREE.CatmullRomCurve3([
         new THREE.Vector3(-80, -40, 0),
         new THREE.Vector3(-70, 40, 0),
@@ -152,33 +219,43 @@ export default {
       texture.repeat.set(20, 1);
       var material = new THREE.MeshPhongMaterial({
         map: texture,
-        side:THREE.DoubleSide,
-        specular:0x4488ee,
-        shininess:2
+        side: THREE.DoubleSide,
+        specular: 0x4488ee,
+        shininess: 2
       });
       var mesh = new THREE.Mesh(geometry, material);
       mesh.translateY(-300);
       scene.add(mesh);
-      let fn = () => {
-        renderFn();
+      this.rafFns.push(() => {
         texture.offset.x -= 0.06;
-        requestAnimationFrame(fn);
-      };
-      fn();
+      });
     }
   },
   mounted() {
     const { scene, renderFn } = init(this.$refs.cvs, 0xb9d3ff, true);
     /* -------------------------------------------------------------------------------------------------------------- */
-    this.baseTexture(scene, renderFn);
-    this.textureTransform(scene, renderFn);
-    this.walkTube(scene, renderFn);
+    this.baseTexture(scene);
+    this.textureTransform(scene);
+    this.walkTube(scene);
+    this.canvasTexture(scene);
+    this.audioTexture(scene);
 
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(230, 150, 110);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0x999999, 1));
     /* -------------------------------------------------------------------------------------------------------------- */
+    let fn = () => {
+      if (!this.componentActive) {
+        return;
+      }
+      renderFn();
+      this.rafFns.forEach(fn => {
+        fn();
+      });
+      requestAnimationFrame(fn);
+    };
+    fn();
   }
 };
 </script>

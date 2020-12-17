@@ -5,7 +5,7 @@
     <router-link to="/Three02-Shadow">阴影</router-link>
     <router-link to="/Three03-model3d">3D建模</router-link>
     <router-link to="/Three04-Texture">纹理(基础)</router-link>
-    <router-link to="/Three05-Texture-notImage">纹理(非图片)</router-link>
+    <router-link to="/Three05-Texture-notImage">更多纹理</router-link>
   </div>
   <div>
     <router-view />
@@ -14,15 +14,14 @@
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 
 #nav {
-  padding: 30px;
+  padding: 20px;
+  position: sticky;
+  top: 0;
 }
 
 #nav a {
@@ -36,7 +35,7 @@
 }
 canvas {
   border: 1px solid #eee;
-  width: 800px;
-  height: 750px;
+  width: 900px;
+  height: 810px;
 }
 </style>
