@@ -232,7 +232,11 @@ export default {
     }
   },
   mounted() {
-    const { scene, renderFn } = init(this.$refs.cvs, 0xb9d3ff, true);
+    const { scene, renderFn } = init({
+      canvas: this.$refs.cvs,
+      clearColor: 0xb9d3ff,
+      addAxesHelper: true
+    });
     /* -------------------------------------------------------------------------------------------------------------- */
     this.baseTexture(scene);
     this.textureTransform(scene);

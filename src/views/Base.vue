@@ -8,7 +8,8 @@ import { init } from "../assets/service.js";
 export default {
   data() {
     return {
-      componentActive: true
+      componentActive: true,
+      rafFns:[]
     };
   },
   beforeUnmount() {
@@ -16,7 +17,11 @@ export default {
   },
   methods: {},
   mounted() {
-    const { scene } = init(this.$refs.cvs, 0xb9d3ff, false);
+    const { scene,renderFn } = init({
+      canvas: this.$refs.cvs,
+      clearColor: 0xb9d3ff,
+      addAxesHelper: true
+    });
     /* -------------------------------------------------------------------------------------------------------------- */
     const mesh = new THREE.Mesh(
       new THREE.BoxGeometry(100, 100, 100),
@@ -31,6 +36,16 @@ export default {
     scene.add(light);
 
     /* -------------------------------------------------------------------------------------------------------------- */
+    let fn = ()=>{
+      if (!this.componentActive) {
+        return;
+      }
+      this.rafFns.forEach(f=>{f()})
+      scene.rotateY(0.005)
+      renderFn()
+      requestAnimationFrame(fn)
+    }
+    fn()
   }
 };
 </script>

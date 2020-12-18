@@ -1,4 +1,4 @@
-<template>  
+<template>
   <canvas ref="cvs"></canvas>
 </template>
 
@@ -14,13 +14,8 @@ export default {
       scene.add(light);
 
       scene.add(new THREE.AmbientLight(0xaaaaaa, 1));
-    }
-  },
-  mounted() {
-    const { scene } = init(this.$refs.cvs, 0xb9d3ff, true);
-    this.addLight(scene);
-    /* -------------------------------------------------------------------------------------------------------------- */
-    let latheTest = () => {
+    },
+    latheTest(scene) {
       // let shape = new THREE.Shape(); //创建Shape对象
       // shape.setFromPoints([new THREE.Vector2(50, 60)]);
       // shape.splineThru([
@@ -62,11 +57,8 @@ export default {
       latheGroup.position.set(300, 300, 0);
 
       scene.add(latheGroup);
-    };
-    latheTest();
-
-    /* -------------------------------------------------------------------------------------------------------------- */
-    let arc_line_test = () => {
+    },
+    arc_line_test(scene) {
       var arc = new THREE.ArcCurve(0, 0, 100, 0, Math.PI * 2);
       let points = arc.getPoints(20);
       let geo = new THREE.Geometry();
@@ -109,10 +101,8 @@ export default {
       group.add(line);
       group.position.set(-100, 60, -30);
       scene.add(group);
-    };
-    arc_line_test();
-    /* -------------------------------------------------------------------------------------------------------------- */
-    let tube_test = () => {
+    },
+    tube_test(scene) {
       var R = 80;
       var arc = new THREE.CatmullRomCurve3([
         new THREE.Vector3(R, 0, 0),
@@ -144,10 +134,8 @@ export default {
       // //线条模型对象
       // var line = new THREE.Line(geometry, material);
       // scene.add(line); //线条对象添加到场景中
-    };
-    tube_test();
-    /* -------------------------------------------------------------------------------------------------------------- */
-    let shape_test = () => {
+    },
+    shape_test(scene) {
       // ---通过顶点定义轮廓 ---------------------------
       // var points = [
       //   new THREE.Vector2(-50, -50),
@@ -191,7 +179,7 @@ export default {
       var extrudePath = new THREE.CatmullRomCurve3([
         new THREE.Vector3(80, 80, 0),
         new THREE.Vector3(160, 160, -80),
-        new THREE.Vector3(200, 200, 0),
+        new THREE.Vector3(200, 200, 0)
         // new THREE.Vector3(160, 160, 80),
         // new THREE.Vector3(80, 80, 0)
       ]);
@@ -202,7 +190,7 @@ export default {
         bevelEnabled: true, // 挤出 斜面开启（具体表现就是衔接处变平滑了，变厚了）
         curveSegments: 50, // 截面上的曲线细分度
         extrudePath,
-        steps: 100,
+        steps: 100
         // depth: 60
       });
       geometry.scale(0.5, 0.5, 0.5);
@@ -217,7 +205,7 @@ export default {
           new THREE.MeshLambertMaterial({
             color: 0x64a3d0,
             // wireframe: true,
-            side: THREE.DoubleSide,
+            side: THREE.DoubleSide
             // transparent:true,
             // opacity:.5
           })
@@ -240,8 +228,22 @@ export default {
         );
         scene.add(points);
       }
-    };
-    shape_test();
+    }
+  },
+  mounted() {
+    const { scene, renderFn } = init({
+      canvas: this.$refs.cvs,
+      clearColor: 0xb9d3ff,
+      addAxesHelper: true
+    });
+    this.addLight(scene);
+    /* -------------------------------------------------------------------------------------------------------------- */
+    this.latheTest(scene);
+    this.arc_line_test(scene);
+    this.tube_test(scene);
+    this.shape_test(scene);
+    /* -------------------------------------------------------------------------------------------------------------- */
+    renderFn();
   }
 };
 </script>

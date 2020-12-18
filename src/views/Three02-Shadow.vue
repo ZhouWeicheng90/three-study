@@ -40,21 +40,27 @@ export default {
       let planeMesh;
       this.rafFns.push(() => {
         let flag = false;
-        if (this.useLightMap && (!planeMaterial||planeMaterial.lightMap !== texture)) {
+        if (
+          this.useLightMap &&
+          (!planeMaterial || planeMaterial.lightMap !== texture)
+        ) {
           console.log("start light Map");
           flag = true;
-          plane = new THREE.PlaneGeometry(300, 200)
+          plane = new THREE.PlaneGeometry(300, 200);
           plane.faceVertexUvs[1] = plane.faceVertexUvs[0];
-          texture.needsUpdate=true;
+          texture.needsUpdate = true;
           planeMaterial = new THREE.MeshLambertMaterial({
             color: 0xffffff,
             lightMap: texture
           });
-        } else if (!this.useLightMap && (!planeMaterial||planeMaterial.lightMap === texture)) {
+        } else if (
+          !this.useLightMap &&
+          (!planeMaterial || planeMaterial.lightMap === texture)
+        ) {
           console.log("close Light ==");
           flag = true;
 
-          plane = new THREE.PlaneGeometry(300, 200)
+          plane = new THREE.PlaneGeometry(300, 200);
           planeMaterial = new THREE.MeshLambertMaterial({
             color: 0xffffff
           });
@@ -115,10 +121,13 @@ export default {
       group.add(mesh);
 
       return group;
-    }
+    },
   },
   mounted() {
-    const { scene, render, renderFn } = init(this.$refs.cvs, 0xb9d3ff, false);
+    const { scene, render, renderFn } = init({
+      canvas: this.$refs.cvs,
+      clearColor: 0xb9d3ff
+    });
     // console.log(camera)
     /* -------------------------------------------------------------------------------------------------------------- */
     render.shadowMap.enabled = true;
