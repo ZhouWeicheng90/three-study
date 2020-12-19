@@ -3,6 +3,10 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
+    path:'',
+    redirect:'/Three06-bubbles'
+  },
+  {
     path: '/Three00-Global',
     component: () => import('../views/Three00-Global.vue')
   },
@@ -26,7 +30,11 @@ const routes = [
   }, {
     path: '/Three06-bubbles',
     component: () => import('../views/Three06-bubbles.vue')
+  }, {
+    path: '/Three07-animation',
+    component: () => import('../views/Three07-animation.vue')
   },
+  
 ]
 
 const router = createRouter({

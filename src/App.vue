@@ -6,10 +6,8 @@
     <router-link to="/Three03-model3d">3D建模</router-link>
     <router-link to="/Three04-Texture">纹理(基础)</router-link>
     <router-link to="/Three05-Texture-notImage">更多纹理</router-link>
-    <router-link to="/Three06-bubbles">泡泡</router-link>
-
-
-    
+    <router-link to="/Three06-bubbles">泡泡(未完成)</router-link>
+    <router-link to="/Three07-animation">动画</router-link>
   </div>
   <div>
     <router-view />

@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { init } from "../assets/service.js";
 
+
 export default {
   data() {
     return {
