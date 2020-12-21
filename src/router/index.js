@@ -33,6 +33,9 @@ const routes = [
   }, {
     path: '/Three07-animation',
     component: () => import('../views/Three07-animation.vue')
+  },{
+    path: '/Three08-examples',
+    component: () => import('../views/Three08-examples.vue')
   },
   
 ]
