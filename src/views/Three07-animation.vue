@@ -121,41 +121,55 @@ export default {
      */
     test01(scene) {
       var geometry = new THREE.CylinderBufferGeometry(5, 10, 120, 20, 100);
-      geometry.translate(0, 60, 0);
+
       let skinIndices = [];
       let skinWeights = [];
-      for (let i = 0; i < geometry.attributes.position.array.length; i += 3) {
+      for (let i = 0; i < geometry.index.array.length; i += 3) {
         let skinIndice = [];
         let skinWeight = [];
-        // let y = geometry.attributes.position.array[i + 1];
-        // if (y <= 60) {
-        //   skinIndice = [0, 0, 0, 0];
-        //   skinWeight = [1-y / 60, 0, 0, 0];
-        // } else if (y > 60 && y <= 100) {
-        //   skinIndice = [1, 0, 0, 0];
-        //   skinWeight = [1-(y - 60) / 40, 0, 0, 0];
-        // } else if (y > 100 && y <= 120) {
-        //   skinIndice = [2, 0, 0, 0];
-        //   skinWeight = [1-(y - 100) / 20, 0, 0, 0];
+        let y = geometry.attributes.position.array[geometry.index.array[i + 1]];
+        if (y <= 0) {
+          skinIndice = 1;
+          skinWeight = -y / 60;
+        } else if (y > 0 && y <= 40) {
+          skinIndice = 2;
+          skinWeight = 1 - y / 40;
+        } else if (y > 40 && y <= 60) {
+          skinIndice = 3;
+          skinWeight = 1 - (y - 40) / 20;
+        } else {
+          console.log(y);
+        }
+        skinIndices.push(skinIndice, 0, 0, 0);
+        skinWeights.push(skinWeight, 0, 0, 0);
+        // if (skinWeight > 1 || skinWeight < 0) {
+        // console.log(y);
         // }
-        skinIndices.push(...skinIndice);
-        skinWeights.push(...skinWeight);
       }
       geometry.attributes.skinIndices = new THREE.BufferAttribute(
-        new Int8Array(skinIndices)
+        new Int8Array(skinIndices),
+        4
       );
       geometry.attributes.skinWeights = new THREE.BufferAttribute(
-        new Float32Array(skinWeights)
+        new Float32Array(skinWeights),
+        4
+      );
+      console.log(
+        geometry.index.array,
+        geometry.attributes.skinIndices,
+        geometry.attributes.skinWeights
       );
 
       var material = new THREE.MeshPhongMaterial({
         wireframe: true,
+        morphTargets: true,
         skinning: true // 允许蒙皮动画
       });
+
       // 创建骨骼网格模型
       var SkinnedMesh = new THREE.SkinnedMesh(geometry, material);
 
-      SkinnedMesh.position.set(50, 120, 50); // 设置网格模型位置
+      // SkinnedMesh.position.set(50, 120, 50); // 设置网格模型位置
       SkinnedMesh.rotateX(Math.PI); // 旋转网格模型
 
       var Bone1 = new THREE.Bone(); //关节1，用来作为根关节
@@ -166,19 +180,20 @@ export default {
       Bone2.add(Bone3);
       // 设置关节之间的相对位置
       // 根关节Bone1默认位置是(0,0,0)
-      Bone1.position.y = 0;
+      Bone1.position.y = -60;
       Bone2.position.y = 60; //Bone2相对父对象Bone1位置
       Bone3.position.y = 40; //Bone3相对父对象Bone2位置
 
       // 所有Bone对象插入到Skeleton中，全部设置为.bones属性的元素
-      var skeleton = new THREE.Skeleton([Bone1, Bone2, Bone3]); //创建骨骼系统
+      var skeleton = new THREE.Skeleton([Bone1, Bone1, Bone2, Bone3]); //创建骨骼系统
       //骨骼关联网格模型
       SkinnedMesh.add(Bone1); //根骨头关节添加到网格模型
+
       SkinnedMesh.bind(skeleton); //网格模型绑定到骨骼系统
 
       // 转动关节带动骨骼网格模型出现弯曲效果  好像腿弯曲一样
-      skeleton.bones[1].rotation.x = 0.5;
-      skeleton.bones[2].rotation.x = 0.5;
+      // skeleton.bones[1].rotation.x = 0.5;
+      // skeleton.bones[2].rotation.x = 0.5;
 
       // -------------------------------------------------------------------------------------------
       var n = 0;
@@ -188,14 +203,14 @@ export default {
         n += 1;
         if (n < T) {
           // 改变骨关节角度
-          skeleton.bones[0].rotation.x -= step;
-          skeleton.bones[1].rotation.x += step;
-          skeleton.bones[2].rotation.x += 2 * step;
+          skeleton.bones[1].rotation.x -= step;
+          skeleton.bones[2].rotation.x += step;
+          skeleton.bones[3].rotation.x += 2 * step;
         }
         if (n < 2 * T && n > T) {
-          skeleton.bones[0].rotation.x += step;
-          skeleton.bones[1].rotation.x -= -step;
-          skeleton.bones[2].rotation.x -= -2 * step;
+          skeleton.bones[1].rotation.x += step;
+          skeleton.bones[2].rotation.x -= -step;
+          skeleton.bones[3].rotation.x -= -2 * step;
         }
         if (n === 2 * T) {
           n = 0;
@@ -217,9 +232,9 @@ export default {
       var box1 = new THREE.BoxBufferGeometry(100, 5, 100); //为变形目标1提供数据
       var box2 = new THREE.BoxBufferGeometry(5, 200, 5); //为变形目标2提供数据
       // 设置变形目标的数据
-      
-      geometry.morphTargets[0] = {name: 'target1',vertices: box1.vertices};
-      geometry.morphTargets[1] = {name: 'target2',vertices: box2.vertices};
+
+      geometry.morphTargets[0] = { name: "target1", vertices: box1.vertices };
+      geometry.morphTargets[1] = { name: "target2", vertices: box2.vertices };
       var material = new THREE.MeshLambertMaterial({
         morphTargets: true, //允许变形
         color: 0x0000ff
@@ -286,6 +301,26 @@ export default {
           });
         });
       });
+    },
+    async addHorse() {
+      let { mesh, animation } = await new Promise(resolve => {
+        loader.load("/skeleton/horse.glb", gltf => {
+          gltf.scene.traverse(obj => {
+            if (obj.isMesh) {
+              resolve({ mesh: obj, animation: gltf.animations[0] });
+            }
+          });
+        });
+      });
+      let clock = new THREE.Clock();
+      let mixer = new THREE.AnimationMixer(mesh);
+      mixer.clipAction(animation).play();
+      this.rafFns.push(() => {
+        mixer.update(clock.getDelta());
+      });
+      mesh.castShadow = true;
+      mesh.position.set(0, 0, -100);
+      return mesh;
     }
   },
   mounted() {
@@ -302,6 +337,9 @@ export default {
     });
     this.testMorph().then(mesh => {
       scene.add(mesh);
+    });
+    this.addHorse().then(horse => {
+      scene.add(horse);
     });
     // this.test01(scene);
     // this.test02(scene)

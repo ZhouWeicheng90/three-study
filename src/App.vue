@@ -8,7 +8,7 @@
     <router-link to="/Three05-Texture-notImage">更多纹理</router-link>
     <router-link to="/Three06-bubbles">泡泡(未完成)</router-link>
     <router-link to="/Three07-animation">动画</router-link>
-    <router-link to="/Three08-examples">更多示例</router-link>
+    <router-link to="/Three08-examples">扩展演练</router-link>
   </div>
   <div>
     <router-view />
