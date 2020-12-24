@@ -11,7 +11,9 @@
     <router-link to="/Three08-examples">扩展演练</router-link>
   </div>
   <div>
-    <router-view />
+    <!-- <keep-alive> -->
+      <router-view />
+    <!-- </keep-alive> -->
   </div>
 </template>
 
