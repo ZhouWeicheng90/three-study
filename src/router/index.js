@@ -36,6 +36,9 @@ const routes = [
   },{
     path: '/Three08-examples',
     component: () => import('../views/Three08-examples.vue')
+  },{
+    path: '/test',
+    component: () => import('../other-pages/TestPage.vue')
   },
   
 ]

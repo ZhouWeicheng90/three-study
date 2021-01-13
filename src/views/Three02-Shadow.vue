@@ -1,11 +1,15 @@
 <template>
-  <canvas ref="cvs"></canvas>
-  <label class="btn" @click="useLightMap=!useLightMap">
-    使用阴影纹理
-    <input type="radio" v-show="useLightMap" checked disabled class="active" />
-    <input type="radio" v-show="!useLightMap" disabled class="deactive" />
-  </label>
-  <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
+  <div class="page">
+    <canvas ref="cvs"></canvas>
+    <div class="info">
+      <label class="btn" @click="useLightMap=!useLightMap">
+        使用阴影纹理
+        <input type="radio" v-show="useLightMap" checked disabled class="active" />
+        <input type="radio" v-show="!useLightMap" disabled class="deactive" />
+      </label>
+      <div>阴影是 光源、模型（通常是mesh）、材质（这是较小的影响因素）综合作用产生的！</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -121,7 +125,7 @@ export default {
       group.add(mesh);
 
       return group;
-    },
+    }
   },
   mounted() {
     const { scene, render, renderFn } = init({
@@ -182,5 +186,15 @@ export default {
   border-color: black;
   color: black;
   background-color: black;
+}
+.page {
+  position: relative;
+  width: min-content;
+  margin: auto;
+}
+.info {
+  position: absolute;
+  top: 0;
+  padding: 1em;
 }
 </style>

@@ -2,62 +2,80 @@
   <div class="page">
     <canvas ref="cvs"></canvas>
     <div class="vol-wrapper">
-      <div class="vol-item" v-for="(vol,i) in volumes" :key="i" :style="{height:vol/4+'px',backgroundColor:`rgb(${vol},${vol},${vol})`}"></div>
+      <div
+        class="vol-item"
+        v-for="(vol,i) in volumes"
+        :key="i"
+        :style="{height:vol/4+'px',backgroundColor:`rgb(${vol},${vol},${vol})`}"
+      ></div>
     </div>
-    <div class="opts">
-      <div class="anim">
-        <label>
-          <input type="radio" name="action1" value="Walking" v-model="action1" />Walking
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Running" v-model="action1" />Running
-        </label>
-        <label>
-          <input type="radio" name="action1" value="WalkJump" v-model="action1" />WalkJump
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Jump" v-model="action1" />Jump
-        </label>
+    <div class="anim1">
+      <label>
+        <input type="radio" name="action1" value="Walking" v-model="action1" />Walking
+      </label>
+      <label>
+        <input type="radio" name="action1" value="Running" v-model="action1" />Running
+      </label>
+      <label>
+        <input type="radio" name="action1" value="Dance" v-model="action1" />Dance
+      </label>
+      <label>
+        <input type="radio" name="action1" value="Idle" v-model="action1" />Idle
+      </label>
+
+      <label>
+        <input type="radio" name="action1" value="Standing" v-model="action1" />Standing
+      </label>
+      <label>
+        <input type="radio" name="action1" value="Sitting" v-model="action1" />Sitting
+      </label>
+      <label>
+        <input type="radio" name="action1" value="Death" v-model="action1" />Death
+      </label>
+    </div>
+    <div class="anim2">
+      <label>
+        <input type="radio" name="action2" value="Jump" v-model="action2" />Jump
+      </label>
+      <label>
+        <input type="radio" name="action2" value="ThumbsUp" v-model="action2" />ThumbsUp
+      </label>
+      <label>
+        <input type="radio" name="action2" value="Yes" v-model="action2" />Yes
+      </label>
+      <label>
+        <input type="radio" name="action2" value="No" v-model="action2" />No
+      </label>
+
+      <label>
+        <input type="radio" name="action2" value="Wave" v-model="action2" />Wave
+      </label>
+
+      <label>
+        <input type="radio" name="action2" value="Punch" v-model="action2" />Punch
+      </label>
+    </div>
+
+    <div class="mtl">
+      <label>
+        <input type="radio" name="roadCover" value="grass" v-model="roadCover" />grass
+      </label>
+      <label>
+        <input type="radio" name="roadCover" value="dirt" v-model="roadCover" />dirt
+      </label>
+    </div>
+    <div class="emotions">
+      <div>
+        <input type="range" min="0" max="1" step="0.01" v-model="emotion[0]" />
+        angry:{{fixdNum(emotion[0])}}
       </div>
-      <div class="anim">
-        <label>
-          <input type="radio" name="action1" value="Standing" v-model="action1" />Standing
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Sitting" v-model="action1" />Sitting
-        </label>
-        <label>
-          <input type="radio" name="action1" value="ThumbsUp" v-model="action1" />ThumbsUp
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Yes" v-model="action1" />Yes
-        </label>
-        <label>
-          <input type="radio" name="action1" value="No" v-model="action1" />No
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Death" v-model="action1" />Death
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Idle" v-model="action1" />Idle
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Wave" v-model="action1" />Wave
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Dance" v-model="action1" />Dance
-        </label>
-        <label>
-          <input type="radio" name="action1" value="Punch" v-model="action1" />Punch
-        </label>
+      <div>
+        <input type="range" min="0" max="1" step="0.01" v-model="emotion[1]" />
+        suprise:{{fixdNum(emotion[1])}}
       </div>
-      <div class="mtl">
-        <label>
-          <input type="radio" name="roadCover" value="grass" v-model="roadCover" />grass
-        </label>
-        <label>
-          <input type="radio" name="roadCover" value="dirt" v-model="roadCover" />dirt
-        </label>
+      <div>
+        <input type="range" min="0" max="1" step="0.01" v-model="emotion[2]" />
+        sad:{{fixdNum(emotion[2])}}
       </div>
     </div>
   </div>
@@ -83,7 +101,7 @@ let robotMesh;
 const roadRadius = 500;
 
 /**
- * @returns {Promise<{mesh:THREE.Object3D, animations:{[key:string]:THREE.AnimationClip}, faces:THREE.Object3D[]}>}
+ * @returns {Promise<{mesh:THREE.Object3D, animations:{[key:string]:THREE.AnimationClip}, faces:THREE.Mesh[]}>}
  */
 function loadRobot() {
   const loader = new GLTFLoader();
@@ -94,7 +112,8 @@ function loadRobot() {
       mesh.traverse(node => {
         //  @ts-ignore
         if (node.isMesh) {
-          if (node.name.startsWith("Head") || node.name.startsWith("head")) {
+          // 只有 name为 Head_4 的 才有表情
+          if (node.name === "Head_4") {
             faces.push(node);
           }
           //  @ts-ignore
@@ -172,7 +191,9 @@ export default {
     return {
       componentActive: true,
       volumes: [],
-      action1: "Walking", // Walking,Standing,Running,Sitting,Jump,WalkJump,
+      action1: "Walking", // "Walking", "Running", "Dance", "Idle","Standing", "Sitting", "Death"
+      action2: "", //"Jump", "ThumbsUp", "Wave", "Yes", "No", "Punch"
+      emotion: [0, 0, 0],
       roadCover: "grass" // 'grass' dirt
     };
   },
@@ -180,6 +201,9 @@ export default {
     this.componentActive = false;
   },
   methods: {
+    fixdNum(num, p = 2) {
+      return Number.prototype.toFixed.call(+num, p);
+    },
     init() {
       /**@type {HTMLCanvasElement} */
       // @ts-ignore
@@ -194,14 +218,14 @@ export default {
 
       camera.aspect = W / H;
       camera.updateProjectionMatrix();
-      camera.position.set(0, 1200, 900);
+      camera.position.set(0, 600, 900);
       camera.lookAt(scene.position);
 
       // ========= orbit-controller : =========
       const controller = new OrbitControls(camera, canvas);
-      controller.minAzimuthAngle = -Math.PI / 2;
-      controller.maxAzimuthAngle = Math.PI / 2;
-      controller.maxPolarAngle = Math.PI / 3.5;
+      //   controller.minAzimuthAngle = -Math.PI / 2;
+      //   controller.maxAzimuthAngle = Math.PI / 2;
+      //   controller.maxPolarAngle = Math.PI / 3.5;
       controller.minPolarAngle = 0;
 
       // ========= mouse: =========
@@ -210,6 +234,8 @@ export default {
         mouse.y = 1 - (e.offsetY * 2) / H;
       };
 
+      scene.position.y = -100;
+      scene.background = new THREE.Color(0x9998aa);
       // ========= raf: =========
       let _myRenderFn = () => {
         if (!this.componentActive) {
@@ -224,7 +250,6 @@ export default {
       _myRenderFn();
     },
     addEnvironment() {
-      scene.position.y = -300;
       // ========= ground : =========
       const groundGroup = new THREE.Group();
       const size = 20000;
@@ -308,57 +333,78 @@ export default {
       let N = 128; //控制音频分析器返回频率数据数量
       let analyser = new THREE.AudioAnalyser(audio, N * 2);
 
-      rafFns.push(() => {          
-        this.volumes = Array.from(analyser.getFrequencyData().slice(0, N / 4));        
+      rafFns.push(() => {
+        this.volumes = Array.from(analyser.getFrequencyData().slice(0, N / 4));
       });
       //
-      this.setAnimations(animations);
-      this.setEmotions(faces);
+      this._setRobotAnimations(animations);
+
+      this._setRobotEmotions(faces[0]);
     },
-    setEmotions(faces) {
-      console.log(faces);
+    /**
+     * @param {THREE.Mesh} face
+     */
+    _setRobotEmotions(face) {
+      rafFns.push(() => {
+        face.morphTargetInfluences[0] = this.emotion[0];
+        face.morphTargetInfluences[1] = this.emotion[1];
+        face.morphTargetInfluences[2] = this.emotion[2];
+      });
     },
 
-    setAnimations(animations) {
+    _setRobotAnimations(animations) {
       let clock = new THREE.Clock();
       let mixer = new THREE.AnimationMixer(robotMesh);
+      let speed;
+
+      /** @type {Map<string,THREE.AnimationAction>} */
       const map = new Map();
 
-      [
-        ...["Walking", "Running", "Jump", "WalkJump"],
-        "Dance",
-        "Idle",
-        "Punch"
-      ].forEach(key => {
+      ["Walking", "Running", "Dance", "Idle"].forEach(key => {
         const action = mixer.clipAction(animations[key]);
         map.set(key, action);
       });
 
-      ["Standing", "Sitting", "ThumbsUp", "Wave", "Death", "Yes", "No"].forEach(
-        key => {
-          const action = mixer.clipAction(animations[key]);
-          action.loop = THREE.LoopOnce;
-          action.clampWhenFinished = true;
-          map.set(key, action);
-        }
-      );
+      [
+        ...["Standing", "Sitting", "Death"],
+        ...["Jump", "ThumbsUp", "Wave", "Yes", "No", "Punch"]
+      ].forEach(key => {
+        const action = mixer.clipAction(animations[key]);
+        action.loop = THREE.LoopOnce;
+        action.clampWhenFinished = true;
+        map.set(key, action);
+      });
 
-      let speed;
+      function onActionChange(actionName) {
+        //   动画切换过于生硬需要优化
+        for (let action of map.values()) {
+          action.stop();
+        }
+        let action = map.get(actionName);
+        action?.play();
+        speed =
+          {
+            Walking: 3.3,
+            Running: 6
+          }[actionName] || 0;
+
+        return action?.getClip().duration*1000 || 0;
+      }
+
       this.$watch(
         "action1",
         () => {
-          for (let action of map.values()) {
-            action.stop();
-          }
-          map.get(this.action1)?.play();
-          // ----- Z
-          speed =
-            {
-              Walking: 3.3,
-              Running: 6,
-              Jump: 0.5,
-              WalkJump: 0.5
-            }[this.action1] || 0;
+          onActionChange(this.action1);
+        },
+        { immediate: true }
+      );
+      this.$watch(
+        "action2",
+        () => {
+          let duration = onActionChange(this.action2);
+          setTimeout(() => {
+            onActionChange(this.action1);
+          }, duration);
         },
         { immediate: true }
       );
@@ -393,9 +439,12 @@ export default {
 }
 .vol-wrapper {
   display: flex;
-  position: absolute;
-  top: 0;
   align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 10px;
+  left:10px;
   height: 54px;
   width: 200px;
   background: #76549888;
@@ -406,19 +455,31 @@ export default {
   margin-right: 2px;
   min-height: 1px;
 }
-.opts {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 120px;
-}
-.anim,
+/* ------------------------------------------------- */
+.anim1,
+.anim2,
+.emotions,
 .mtl {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: absolute;
+  top: 10px;
 }
-.mtl{
-    margin-top: 30px;
+.emotions {
+  right: 0;
+  width: 240px;
+}
+.anim2 {
+  right: 240px;
+  width: 120px;
+}
+.anim1 {
+  right: 360px;
+  width: 110px;
+}
+.mtl {
+  right: 470px;
+  width: 80px;
 }
 </style>

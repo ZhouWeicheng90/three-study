@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div id="nav" v-show="$route.path!=='/test'">
     <router-link to="/Three00-Global">three能力概览</router-link>
     <router-link to="/Three01-Geometry">Geometry</router-link>
     <router-link to="/Three02-Shadow">阴影</router-link>
@@ -9,21 +9,17 @@
     <router-link to="/Three06-bubbles">泡泡(未完成)</router-link>
     <router-link to="/Three07-animation">动画</router-link>
     <router-link to="/Three08-examples">扩展演练</router-link>
+    <router-link to="/test">测试</router-link>
   </div>
-  <div>
-    <!-- <keep-alive> -->
-      <router-view />
-    <!-- </keep-alive> -->
+  <div>      
+      <router-view />   
   </div>
 </template>
 
 <style>
-#app {
+#nav {
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
   padding: 20px;
   position: sticky;
   top: 0;
@@ -42,5 +38,7 @@ canvas {
   border: 1px solid #eee;
   width: 900px;
   height: 810px;
+  display: block;
+  margin: auto;
 }
 </style>
