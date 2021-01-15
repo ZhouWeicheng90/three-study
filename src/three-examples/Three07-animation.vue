@@ -4,7 +4,7 @@
 
 <script>
 import * as THREE from "three";
-import { init } from "../assets/service.js";
+import { init } from "./service.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const loader = new GLTFLoader();

@@ -14,7 +14,7 @@
 
 <script>
 import * as THREE from "three";
-import { init } from "../assets/service.js";
+import { init } from "./service.js";
 var texture = new THREE.TextureLoader().load("/imgs/earth2.jpg");
 export default {
   data() {

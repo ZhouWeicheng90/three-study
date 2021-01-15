@@ -1,17 +1,17 @@
 <template>
-  <Resume/>
+  <MyResume/>
   <!-- <Base/> -->
 </template>
 
 <script>
 // import GridTest from './GridTest'
 // import Base from './Base'
-import Resume from "./Resume";
+import MyResume from "./MyResume";
 export default {
   components: {
     // GridTest,
     // Base,
-    Resume
+    MyResume
   }
 };
 </script>

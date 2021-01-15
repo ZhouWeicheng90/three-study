@@ -5,7 +5,7 @@
 <script>
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { init } from "../assets/service.js";
+import { init } from "./service.js";
 
 
 export default {

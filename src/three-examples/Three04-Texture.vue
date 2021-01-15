@@ -4,7 +4,7 @@
 
 <script>
 import * as THREE from "three";
-import { init } from "../assets/service.js";
+import { init } from "./service.js";
 const url = "/imgs/earth.jpg";
 const url2 = "/imgs/earth2.jpg";
 const video = document.createElement("video");

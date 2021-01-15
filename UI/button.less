@@ -1,0 +1,101 @@
+@hover-lighten    : 18%;
+@disabled-lighten : 30%;
+@active-lighten   : -2%;
+@active-shadow    : 0 0 .5em 2px #abc;
+
+.btn {
+    cursor          : pointer;
+    padding         : 0.5em 1em;
+    outline         : 0;
+    border-radius   : 0.25em;
+    border-width    : 1px;
+    border-style    : solid;
+    border-color    : transparent;
+    background-color: inherit;
+    color           : white;
+    transition      : all @transition-time;
+    font            : inherit;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+}
+.btn.btn-circle{
+    border-radius: 2em;
+}
+// ****************************** buttonStyles and colors**************************************
+.add-btn(@colorName, @realcolor) {
+    .mute-border-when-default() when (@realcolor =@default-color) {
+        border-color: @mute-color;
+    }
+
+    .hope-mix-heavy(@lighten) {
+        background-color: lighten(@realcolor, @lighten);
+    }
+
+    .hope-mix-light(@lighten) {
+        border-color: lighten(@realcolor, @lighten);
+        color       : lighten(@realcolor, @lighten);
+        .mute-border-when-default();
+    }
+
+    .status-styles(@status, @lighten) {
+        @classSuffix: ~"@{colorName}:@{status}";
+
+        .shadow-when-active() when (@status =active) {
+            box-shadow: @active-shadow;
+        }
+
+        .btn-light-@{classSuffix},
+        .btn-dashed-@{classSuffix} {
+            .hope-mix-light(@lighten);
+            .shadow-when-active();
+        }
+
+        .btn-link-@{classSuffix} {
+            .hope-mix-light(@lighten);
+        }
+
+        .btn-heavy-@{classSuffix} {
+            .hope-mix-heavy(@lighten);
+            .shadow-when-active();
+        }
+    }
+
+    .status-styles() {
+
+        .btn-light-@{colorName} {
+            .hope-mix-light(0);
+        }
+
+        .btn-dashed-@{colorName} {
+            .hope-mix-light(0);
+            border-style: dashed;
+        }
+
+        .btn-link-@{colorName} {
+            .hope-mix-light(0);
+            border-color: transparent !important;
+        }
+
+        .btn-heavy-@{colorName} {
+            .hope-mix-heavy(0);
+        }
+    }
+
+    .status-styles();
+    .status-styles(hover, @hover-lighten);
+    .status-styles(active, @active-lighten);
+    .status-styles(disabled, @disabled-lighten);
+}
+
+@colorThemes: primary, @primary-color, info, @info-color , warning, @warning-color, success, @success-color, error, @error-color , default, @default-color;
+
+.loopColor(@i) when (@i <length(@colorThemes)) {
+    @colorName : extract(@colorThemes, @i);
+    @realcolor : extract(@colorThemes, @i+1);
+    .add-btn(@colorName, @realcolor);
+    .loopColor(@i+2);
+}
+
+.loopColor(1);

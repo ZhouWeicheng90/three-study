@@ -4,7 +4,7 @@
 
 <script>
 import * as THREE from "three";
-import { init } from "../assets/service.js";
+import { init } from "./service.js";
 export default {
   methods: {
     addLight(scene) {

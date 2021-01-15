@@ -1,0 +1,22 @@
+
+
+.page {
+    margin   : 6px auto;
+    font-size: 16px;
+    padding  : 4em 5em;
+
+    /* 一张纸,长宽比 1.414:1 */
+    width     : 980px;
+    height    : 1420px;
+    box-shadow: 0 0 0 1px inset #888;
+}
+
+.flex {
+    display: flex;
+}
+
+.avatar {
+    border-radius: 50%;
+    width        : 100px;
+    height       : 100px;
+}
