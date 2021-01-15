@@ -1,10 +1,19 @@
 import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
-import router from './router.js'
-import store from './other-pages/store'
 
 import UI from "../UI";
+import ThreeExamples from './three-examples'
+import Resume from './other-pages'
 
-const app = createApp(App).use(store).use(router)
+const app = createApp(App)
+const routes = []
+
 app.use(UI)
-app.mount('#app')
+app.use(ThreeExamples, { routes, setDefault: true })
+app.use(Resume, { routes })
+
+app.use(createRouter({
+    history: createWebHashHistory(),
+    routes
+})).mount('#app')

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="flex">
-      <img src="./avatar.jpg" class="ellipse avatar" />
+      <img src="./components/avatar.jpg" class="ellipse avatar" />
       <div class="resume">
         <div>
           <span class="name">周维成</span>

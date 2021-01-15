@@ -63,11 +63,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+@import "./button.less";
+
 .btn.long {
-  /* todo 这样肯定有bug */
-  /* display: block; */
   width: 100%;
-  margin: auto;
 }
 </style>

@@ -1,6 +1,5 @@
-import './theme.less'
-import Button from './Button.vue'
-import Icon from './Icon.vue'
+import Button from './button/Button.vue'
+import Icon from './icon/Icon.vue'
 
 export default {
     /**

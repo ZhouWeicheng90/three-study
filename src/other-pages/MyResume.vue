@@ -1,5 +1,5 @@
 <template>
-  <!-- <Resume01 /> -->
+  <Resume01 />
   <div class="page">
     <div class="options">
       <div style="outline:1px solid red;height:2px;" class="bbb"></div>
@@ -38,7 +38,9 @@
       </Button>
     </div>
 
-    <Icon></Icon>
+    <div class="ico">
+      中国<Icon></Icon>Hello 
+    </div>
   </div>
   <div class="page">
     技术：js，css，html，vue……
@@ -47,8 +49,9 @@
 </template>
 
 <script>
-// import Resume01 from "./Resume01";
+import Resume01 from "./Resume01";
 export default {
+  components: { Resume01 },
   data() {
     return {
       colors: ["default", "info", "primary", "success", "warning", "error"],
@@ -59,8 +62,8 @@ export default {
       isLong:false,
       shape: ""
     };
-  }
-  // components: { Resume01 }
+  },
+  
 };
 </script>
 
@@ -73,6 +76,10 @@ export default {
 }
 
 .active {
+  color: blue;
+}
+.ico{
+  font-size: 32px;
   color: blue;
 }
 </style>
