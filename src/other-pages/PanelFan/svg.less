@@ -1,0 +1,39 @@
+@import ~"../../../UI/button/button.less";
+
+@blades: primary @primary-color success @success-color error @error-color warning @warning-color;
+
+.loop(@i) when (@i<length(@blades)) {
+    @type : extract(@blades, @i);
+    @color: extract(@blades, @i+1);
+
+    .svg-blade-@{type} {
+        fill: @color
+    }
+
+    .svg-blade-@{type}:hover {
+        fill: lighten(@color, @hover-lighten)
+    }
+
+    .svg-blade-@{type}:active,
+    .svg-blade-@{type}.active {
+        fill: lighten(@color, @active-lighten+0.5)
+    }
+
+    .loop(@i+2)
+}
+
+.loop(1);
+
+.svg-blade {
+    cursor          : pointer;
+    transform-origin: center;
+    transition      : all 0.3s;
+}
+
+// svg-blade-xxxxx
+.svg-text {
+    fill             : white;
+    text-anchor      : middle;
+    font-weight      : bold;
+    dominant-baseline: middle;
+}

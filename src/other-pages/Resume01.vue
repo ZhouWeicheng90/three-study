@@ -5,11 +5,12 @@
       <div class="resume">
         <div>
           <span class="name">周维成</span>
-          <span>近6年经验</span>          
+          <span>近6年经验</span>
         </div>
         <div>工作意向：深圳 高级前端</div>
         <div>联系方式：13246687618 1073346590@qq.com</div>
       </div>
+      <Panel class="svg" :bladeTexts="texts" @activeChange="afterChange" />
     </div>
     <div>
       武汉轻工业大学（2008.09-2012.06）软件工程专业
@@ -31,9 +32,20 @@
 </template>
 
 <script>
+import Panel from "./PanelFan";
 export default {
-
-}
+  components: { Panel },
+  data() {
+    return {
+      texts: ["标题一", "标题二", "标题三"]
+    };
+  },
+  methods: {
+    afterChange(activeInd) {
+      console.log(`你点击了：` + this.texts[activeInd]);
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -42,5 +54,9 @@ export default {
   color: #000;
   display: inline-block;
   margin-right: 1em;
+}
+.svg {
+  width: 200px;
+  height: 200px;
 }
 </style>
