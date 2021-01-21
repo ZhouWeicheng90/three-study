@@ -50,6 +50,7 @@
 
 <script>
 import Resume01 from "./Resume01";
+import "./background3d";
 export default {
   components: { Resume01 },
   data() {
@@ -59,11 +60,10 @@ export default {
       buttonStyle: "heavy",
 
       disabled: false,
-      isLong:false,
+      isLong: false,
       shape: ""
     };
-  },
-  
+  }
 };
 </script>
 
@@ -71,14 +71,15 @@ export default {
 .options {
   padding: 0.5em 1em;
 }
-.options > .btn,.bbb {
+.options > .btn,
+.bbb {
   margin: 0.25em;
 }
 
 .active {
   color: blue;
 }
-.ico{
+.ico {
   font-size: 32px;
   color: blue;
 }

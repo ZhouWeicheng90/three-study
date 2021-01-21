@@ -15,7 +15,6 @@ const cubeTexture = new THREE.CubeTextureLoader()
     "posz.jpg",
     "negz.jpg"
   ]);
-cubeTexture;
 
 const textureArr = [
   new THREE.TextureLoader().load("/envs/snowflake4.png"),

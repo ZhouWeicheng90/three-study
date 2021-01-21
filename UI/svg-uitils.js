@@ -1,12 +1,6 @@
 // @ts-check
-/** 
- * @typedef {{order:string, nums:number[]}} Command 
- * */
-
-
 
 /**
- * 
  * @param {string} str 
  * @param {boolean} toAbsolute 
  */
@@ -22,6 +16,10 @@ export function translatePath(str, toAbsolute) {
     }
     return stringifyCommands(buf)
 }
+
+/** 
+ * @typedef {{order:string, nums:number[]}} Command 
+ * */
 /**
  * @returns {{cmd:Command,x:number,y:number}}
  * @param {Command} p 
@@ -128,7 +126,6 @@ function stringifyCommands(commands) {
             coodexs.push([nums[i], nums[i + 1]].join(','))
         }
         str += order + coodexs.join(' ')
-
     }
     return str;
 
@@ -149,6 +146,5 @@ function parseOneCommand(s) {
         nums.push(num);
         s = s.replace(/^\s*[+-]?[0-9]*(\.[0-9]*)?/, '');
     }
-
     return { str: s, cmd: { order, nums } }
 }

@@ -27,7 +27,7 @@ function _getRadiusPath(start, end, r, rate = 1) {
  */
 function _getInfo(gap, inRate) {
     const degStart = 120;
-    const degEnd = 240;
+    const degEnd = degStart + 120;
     const r = 0.5;
 
     // 逆时针的4个顶点

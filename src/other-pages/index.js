@@ -1,5 +1,5 @@
-import store from './components/store.js'
-import './components/common.css'
+import store from './assets/store.js'
+import './assets/common.css'
 
 export default {
     /**

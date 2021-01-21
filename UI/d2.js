@@ -30,10 +30,10 @@ class Base {
 /**
  * 
  * @typedef {{
- * result:()=>number[],
- * translate:(tx:number,ty:number)=>D2,
- * rotate:(deg:number)=>D2,
- * scale:(sx:number,sy:number)=>D2
+ *  result:()=>number[],
+ *  translate:(tx:number,ty:number)=>D2,
+ *  rotate:(deg:number)=>D2,
+ *  scale:(sx:number,sy:number)=>D2
  * }} D2
  */
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="mypage">
     <canvas ref="cvs"></canvas>
     <div class="info">
       <label class="btn" @click="useLightMap=!useLightMap">
@@ -187,7 +187,7 @@ export default {
   color: black;
   background-color: black;
 }
-.page {
+.mypage {
   position: relative;
   width: min-content;
   margin: auto;
