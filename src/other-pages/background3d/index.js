@@ -18,10 +18,24 @@ let scene;
  */
 let renderer;
 
+/** 窗口宽高 */
 let W, H;
 
+/** camera的 x，y 将要移动的位置 */
 let cameraX = 0;
 let cameraY = 0;
+
+function easeOffset(offset) {
+    // 移动的ease系数：
+    let ease = 32
+
+    let sign = Math.sign(offset)
+    let abs = Math.abs(offset)
+    if (abs <= 0.02) {
+        return sign * abs
+    }
+    return sign * abs / ease
+}
 
 function init() {
     const canvas = document.createElement('canvas')
@@ -40,7 +54,7 @@ function init() {
     mask.style.right = '0';
     mask.style.bottom = '0';
     mask.style.zIndex = '-1';
-    mask.style.background = "rgba(255, 255, 255, .2)"
+    mask.className = "bg-mask"
     document.body.append(mask)
 
 
@@ -67,10 +81,11 @@ function onWindowSizeChange() {
 }
 
 window.addEventListener('mousemove', event => {
-    cameraX = (event.clientX - W / 2) * 0.01;
-    cameraY = (H / 2 - event.clientY) * 0.01;
+    // 背景移动幅度系数,符号代表方向：
+    let rate = -0.005;
 
-    console.log(cameraX, cameraY)
+    cameraX = (event.clientX - W / 2) * rate;
+    cameraY = (H / 2 - event.clientY) * rate * camera.aspect;
 })
 
 
@@ -78,15 +93,7 @@ init();
 window.addEventListener('resize', onWindowSizeChange)
 
 let snowDropingFn = addDroppingSnow(scene)
-function easeOffset(offset) {
-    let sign = Math.sign(offset)
-    let abs = Math.abs(offset)
-    if (abs <= 0.01) {
-        return sign * abs
-    }
-    return sign * abs / 32
 
-}
 function rafRender() {
     snowDropingFn(camera)
 

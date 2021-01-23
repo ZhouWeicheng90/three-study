@@ -1,7 +1,7 @@
 // @ts-check
-import getSvgInfo from "./getSvgInfo";
+import getBladeInfo from "./getBladeInfo.js";
 import { h } from "vue";
-const { fanbladePath, textXStart, textSize, innerTextPath } = getSvgInfo();
+const { fanbladePath, textXStart, textSize, innerTextPath } = getBladeInfo();
 
 const txtPath = h("path", {
   id: "txtPath",

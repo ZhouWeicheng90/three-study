@@ -77,10 +77,9 @@ export default {
  * 
  * grid-template
  * 用于定义 grid-template-rows ，grid-template-columns ，grid-template-areas 简写属性
- *      grid-template:  [row1-start] "header header header" 25px [row1-end]
-                        [row2-start] "footer footer footer" 25px [row2-end]
-                         / auto 50px auto;            
-                         // 定义了2行 3列，行与列中间用/分割。定义行时同时定义了先的名称，注意中间的线有两个名称 row1-end和row2-start，并同时指明了area。
+ *      grid-template:  [row1-start] "header header header" 25px [row1-end] [row2-start] "footer footer footer" 25px [row2-end] / auto 50px auto;       
+                         // 定义了2行 3列 定义行时同时定义了先的名称，注意中间的线有两个名称 row1-end和row2-start，并同时指明了area。
+                         【注：行与列中间用/分割】
 
  *
  * grid 
@@ -125,8 +124,6 @@ export default {
   /* align-content: stretch; */
   place-content: center center;
 
-
-  
   margin: auto;
   height: 600px;
 }

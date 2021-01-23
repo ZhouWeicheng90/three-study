@@ -78,7 +78,6 @@ export default function (scene) {
 
         // 远近是相对于相机的坐标的：
         let { x: cx, y: cy, z: cz } = camera.position;
-        spritesGroup.position.set(cx, cy, cz)
 
         sprites.forEach(sprite => {
             const distance = 0.1 * (Math.random() - 0.5) + 0.2; // 随机下降距离： 0.2+/-0.05的偏差

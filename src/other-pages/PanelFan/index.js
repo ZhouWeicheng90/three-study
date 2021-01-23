@@ -41,6 +41,7 @@ const component = {
                     </feMerge>
                 </filter>
                 {bladeTypes.map((type, i) => (
+                    // @ts-ignore
                     <Blade
                         key={type}
                         type={type}
