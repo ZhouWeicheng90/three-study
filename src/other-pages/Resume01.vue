@@ -1,39 +1,13 @@
 <template>
   <div class="page">
-    <div class="resume-wrapper">
-      <img class="avatar" src="./assets/avatar.jpg" />
-      <div class="resume">
-        <span class="stressed-name">周维成</span>
-        <Icon class="man-icon" type="man"></Icon>
-        <span>(1990.10.11)</span>
-
-        <div class="grid-baseinfo">
-          <span>工作经验：6年经验</span>
-          <div>工作意向：深圳 高级前端</div>
-
-          <!-- 二分 -->
-
-          <div>电话：13246687618</div>
-          <!-- 加上复制 -->
-          <div>邮箱：1073346590@qq.com</div>
-        </div>
-      </div>
-    </div>
-
+    <ResumeBaseInfo style="margin-bottom: 2em;" />
     <dl>
-      <dt class="item-title">
-        <div class="custom-tag">教育背景</div>
-      </dt>
-      <dd class="item-content">
+      <ResumeItemCard title="教育背景">
         武汉轻工业大学（2008.09-2012.06） 本科 软件工程专业
         数学建模
         国信蓝点杯计算机程序设计大赛，英语水平
-      </dd>
-
-      <dt class="item-title">
-        <div class="custom-tag">工作经历</div>
-      </dt>
-      <dd class="item-content">
+      </ResumeItemCard>
+      <ResumeItemCard title="工作经历">
         <div>
           2015年：
           前端旧时代的技术，Strutsc框架，jQuery为主，加上初入职场，能够胜任工作就是优秀吧，额~。
@@ -72,20 +46,22 @@
             涉及：Audio context，indexDB，vue。
           </div>
         </div>
-        <div>2019年10日</div>
-      </dd>
-
-      <dt class="item-title">
-        <div class="custom-tag">自我评价</div>
-      </dt>
-      <dd class="item-content">可含，兴趣爱好，技能特长</dd>
+        <div>
+          2019年10日
+          <div>内容管理系统</div>
+          <div>公共项目</div>
+        </div>
+      </ResumeItemCard>
+      <ResumeItemCard title="自我评价">可含，兴趣爱好，技能特长</ResumeItemCard>
     </dl>
   </div>
 </template>
 
 <script>
+import ResumeBaseInfo from "./components/ResumeBaseInfo";
+import ResumeItemCard from "./components/ResumeItemCard";
 export default {
-  components: {},
+  components: { ResumeItemCard, ResumeBaseInfo },
   data() {
     return {};
   },
@@ -95,95 +71,4 @@ export default {
 
 <style scoped lang="less">
 @import "../../UI/theme.less";
-@shadow-color: #aaa;
-
-.resume-wrapper {
-  display: flex;
-  margin-bottom: 2em;
-}
-/* ---------------------------------- */
-
-.item-title {
-  display: flex;
-}
-
-.item-title::after {
-  content: "";
-  flex: 1;
-  margin-left: 1.35em;
-  margin-top: calc(.625em);
-  height: 0px;
-  border-top: 0.1em solid @shadow-color;
-}
-
-.custom-tag {
-  display: inline-block;
-  color: white;
-  padding: 0.35em 1em;
-
-  position: relative;
-  z-index: 5;
-}
-
-.custom-tag::before,
-.custom-tag::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-}
-
-.custom-tag::after {
-  z-index: -1;
-  background: rgba(45, 140, 240, 1);
-}
-.custom-tag::before {
-  z-index: -2;
-
-  background: @shadow-color;
-  transform: skew(-30deg) translate(1px,0);
-  transform-origin: bottom right;
-  top: 25%;
-  bottom: 1px;
-  left: 20%;
-}
-
-.item-content {
-  padding: 1em 0 2em 2.5em;
-}
-/* ---------------------------------- */
-.avatar {
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  margin: 0 2em;
-}
-
-.resume {
-  padding-left: 2em;
-  flex: 1;
-}
-.stressed-name {
-  font-size: 30px;
-  color: #000;
-  display: inline-block;
-}
-.man-icon {
-  display: inline-block;
-  font-size: 1.25em;
-  margin: 0 1em;
-  color: @primary-color;
-  font-weight: bold;
-}
-
-.grid-baseinfo {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template: 1fr 1fr / repeat(2, 260px);
-  justify-content: space-between;
-}
-
-/* ---------------------------------- */
 </style>

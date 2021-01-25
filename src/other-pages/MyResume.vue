@@ -2,7 +2,7 @@
   <Resume01 />
 
   <div class="page">
-    <TestButton />
+    <!-- <TestButton /> -->
     <Panel class="svg" :bladeTexts="texts" @activeChange="afterChange" />
     <div>技术：js，css，html，vue……</div>
     <div>能力：擅长设计，让复杂系统更易维护；有多次重构的经验。</div>
@@ -10,9 +10,13 @@
 </template>
 
 <script>
-import Panel from "./PanelFan";
+/**
+ * 1、条目可展开，vue动画，上下icon的动画。只有一个展开。
+ * 2、
+ */
+import Panel from "./components/PanelFan";
 import Resume01 from "./Resume01";
-import "./background3d";
+import "./components/background3d";
 export default {
   components: { Resume01, Panel },
   data() {

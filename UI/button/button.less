@@ -1,8 +1,4 @@
 @import '../theme.less';
-@hover-lighten    : 18%;
-@disabled-lighten : 30%;
-@active-lighten   : -2%;
-@active-shadow    : 0 0 .5em 2px #abc;
 
 .btn {
     cursor          : pointer;
@@ -21,9 +17,11 @@
 .btn:disabled {
     cursor: not-allowed;
 }
-.btn.btn-circle{
+
+.btn.btn-circle {
     border-radius: 2em;
 }
+
 // ****************************** buttonStyles and colors**************************************
 .add-btn(@colorName, @realcolor) {
     .mute-border-when-default() when (@realcolor =@default-color) {

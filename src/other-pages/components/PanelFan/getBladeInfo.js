@@ -17,6 +17,7 @@ function _getRadiusPath(start, end, r, rate = 1) {
     let p2 = [Math.sin(rad2) * rate + 1, Math.cos(rad2) * rate + 1].map(
         n => n * r
     );
+    // @ts-ignore
     return [p1, p2];
 }
 
