@@ -1,15 +1,32 @@
 <template>
   <i>
-    <svg class="svg">
-      <use href="./man.svg#root" v-if="type==='man'" />
+    <svg class="svg" :viewBox="view">
+      <path class="svg" :d="path" />
     </svg>
   </i>
 </template>
 
 <script>
+import * as Icons from "./iconsPath";
 export default {
   props: {
     type: {}
+  },
+  data() {
+    return {
+      path: ``,
+      view: ``
+    };
+  },
+  watch: {
+    type: {
+      immediate: true,
+      handler() {
+        let obj = Icons[this.type] || { path: "", view: "" };
+        this.path = obj.path;
+        this.view = obj.view;
+      }
+    }
   }
 };
 </script>

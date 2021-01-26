@@ -1,9 +1,13 @@
 <template>
   <div>
     <dt class="item-title">
-      <div class="custom-tag">{{title}}</div>
+      <div class="custom-tag">
+        {{title}}
+        <Icon type="down" class="cardicon" :class="isFolded?'fold':''" @click="isFolded=!isFolded" />
+      </div>
     </dt>
-    <dd class="item-content">
+
+    <dd class="item-content" :class="isFolded?'hidecontent':''">
       <slot></slot>
     </dd>
   </div>
@@ -15,12 +19,45 @@ export default {
     title: {
       type: String
     }
+  },
+  data() {
+    return {
+      isFolded: false
+    };
   }
 };
 </script>
 
 <style scoped lang="less">
+@import "../theme.less";
+.cardicon,
+.item-content {
+  transition: all @transition-time;
+}
+
+.cardicon {
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: 0.75em;
+  margin-left: 0.125em;
+  cursor: pointer;
+}
+.cardicon.fold {
+  transform: rotate(-90deg);
+}
+
+.item-content {
+  padding: 1em 0 2em 2.5em;
+  overflow: hidden;
+}
+.item-content.hidecontent {
+  height: 0;
+
+  padding: 0 0 0 2.5em;
+}
+
 @shadow-color: #aaa;
+
 .item-title {
   display: flex;
 }
@@ -56,7 +93,7 @@ export default {
 
 .custom-tag::after {
   z-index: -1;
-  background: rgba(45, 140, 240, 1);
+  background: @primary-color;
 }
 .custom-tag::before {
   z-index: -2;
@@ -65,9 +102,5 @@ export default {
   transform: skew(-30deg);
   transform-origin: bottom right;
   top: 25%;
-}
-
-.item-content {
-  padding: 1em 0 2em 2.5em;
 }
 </style>
