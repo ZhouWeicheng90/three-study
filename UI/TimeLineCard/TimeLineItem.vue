@@ -1,5 +1,5 @@
 <template>
-  <div :style="styleObj" class="item" :class="finished?'last':''">
+  <div :class="[`${axuiPrefix}time-line${finished?'-last':''}`]">
     <slot></slot>
   </div>
 </template>
@@ -13,50 +13,48 @@ export default {
     }
   },
   data() {
-    return {
-      styleObj: {
-        "--item-left": "1.5em",
-        "--point-width": "0.25em",
-        "--pot-top": " 0.5em"
-      }
-    };
+    return {};
   }
 };
 </script>
 
 <style scoped lang="less">
 @import "../theme.less";
-.item {
-  padding-left: var(--item-left);
 
-  padding-bottom: 1em;
+.@{ui-prefix}time-line,
+.@{ui-prefix}time-line-last {
+  display: flex;  
   position: relative;
 }
-.item::before {
-  content: "";
-  display: inline-block;
-  width: var(--point-width);
-  height: var(--point-width);
-  border: calc(var(--point-width) / 2) solid transparent;
-  border-radius: 50%;
+.@{ui-prefix}time-line{
+  padding-bottom: 0.5em;
+}
 
-  margin-left: calc(0px - var(--item-left));
-  margin-right: calc(var(--item-left) - var(--point-width) * 2);
+.@{ui-prefix}time-line::before,
+.@{ui-prefix}time-line-last::before {
+  content: "";
+  width: @time-line-point-width;
+  height: @time-line-point-width;
+  border-radius: 50%;
+  border: calc(@time-line-point-width / 2) solid transparent;
   background: @primary-color;
   background-clip: content-box;
-  vertical-align: top;
-  margin-top: var(--pot-top);
-  box-shadow: 0 0 0 calc(var(--point-width) / 5)
+  box-shadow: 0 0 0 calc(@time-line-point-width / 4)
     lighten(@primary-color, @hover-lighten);
+  flex: 0 0 auto;
+
+  margin-top: calc(0.75em - @time-line-point-width);
+  margin-right: 0.75em;
 }
-.item:not(.last)::after {
+.@{ui-prefix}time-line::after {
   content: "";
-  display: inline-block;
   position: absolute;
-  left: var(--point-width);
-  top: calc(var(--point-width) * 2 + var(--pot-top));
-  bottom: calc(0px - var(--pot-top));
+  left: @time-line-point-width;
+  top: calc(@time-line-point-width * 1.25 + 0.75em);
+  bottom: calc(@time-line-point-width*.75 - 0.75em);
   width: 1px;
   box-shadow: 1px 0 0 0 inset @primary-color;
 }
+
+
 </style>

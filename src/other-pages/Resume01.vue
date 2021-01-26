@@ -1,13 +1,13 @@
 <template>
   <div class="page">
-    <ResumeBaseInfo style="margin-bottom: 2em;" />
+    <ResumeBaseInfo class="item" />
 
-    <Card title="教育背景">
+    <Card title="教育背景" class="item">
       <div>武汉轻工业大学（2008.09-2012.06） 本科 软件工程专业</div>
       <TimeLineItem>在校期间参加数学建模培训等活动，并参加“国信蓝点杯”——软件专业人才设计与开发大赛，湖北预选赛成绩优异，全国总决赛三等奖。</TimeLineItem>
       <TimeLineItem finished>英语四级证书（工作中经常看英文文档，应该有提升）</TimeLineItem>
     </Card>
-    <Card title="工作经历">
+    <Card title="工作经历" class="item">
       <div>
         2015年：
         前端旧时代的技术，Strutsc框架，jQuery为主，加上初入职场，能够胜任工作就是优秀吧，额~。
@@ -34,8 +34,7 @@
         </TimeLineItem>
       </div>
       <div>
-        <div>2018年7月-2019年8月 科大讯飞</div>
-        开始接触vue，并不断深入学习直到现在；开始学习webpack，nodejs等。
+        <div>2018年7月-2019年8月 科大讯飞</div>开始接触vue，并不断深入学习直到现在；开始学习webpack，nodejs等。
         <TimeLineItem>
           所在部门的项目代码普遍很糟，作为一个小兵，竭尽所能改变现状。
           代表1：移动办案app的深度重构，解决了因代码混乱引起的诸多交互bug，和性能问题。
@@ -53,7 +52,7 @@
         <TimeLineItem finished>公共项目</TimeLineItem>
       </div>
     </Card>
-    <Card title="自我评价">可含，兴趣爱好，技能特长</Card>
+    <Card title="自我评价" class="item">可含，兴趣爱好，技能特长</Card>
   </div>
 </template>
 
@@ -62,9 +61,7 @@ import ResumeBaseInfo from "./components/ResumeBaseInfo";
 
 export default {
   components: {
-
-    ResumeBaseInfo,
-
+    ResumeBaseInfo
   },
   data() {
     return {};
@@ -75,4 +72,8 @@ export default {
 
 <style scoped lang="less">
 @import "../../UI/theme.less";
+.item {
+  margin-bottom: 2em;
+  // font-size: 20px;
+}
 </style>

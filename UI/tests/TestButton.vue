@@ -2,7 +2,7 @@
   <div class="options">
     <div style="outline:1px solid red;height:2px;" class="bbb"></div>
     <template v-for="clr in colors" :key="clr">
-      <Button
+      <Button class="bbb"
         :color="clr"
         :buttonStyle="buttonStyle"
         :disabled="disabled"
@@ -14,7 +14,7 @@
 
   <div class="options">
     buttonStyles:
-    <Button
+    <Button class="bbb"
       v-for="st in buttonStyles"
       :key="st"
       @click="buttonStyle=st"
@@ -22,15 +22,15 @@
     >{{st}}</Button>
   </div>
   <div class="options">
-    <Button @click="disabled=!disabled">
+    <Button class="bbb" @click="disabled=!disabled">
       <span :class="{active:disabled}">disabled</span>/
       <span :class="{active:!disabled}">active</span>
     </Button>
-    <Button @click="isLong=!isLong">
+    <Button class="bbb" @click="isLong=!isLong">
       <span :class="{active:isLong}">long</span>/
       <span :class="{active:!isLong}">normal</span>
     </Button>
-    <Button @click="shape=(shape?'':'circle')">
+    <Button class="bbb" @click="shape=(shape?'':'circle')">
       <span :class="{active:shape==='circle'}">circle</span>/
       <span :class="{active:shape!=='circle'}">normal</span>
     </Button>
@@ -57,7 +57,6 @@ export default {
 .options {
   padding: 0.5em 1em;
 }
-.options > .btn,
 .bbb {
   margin: 0.25em;
 }

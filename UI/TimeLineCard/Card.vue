@@ -1,15 +1,25 @@
 <template>
   <div>
-    <dt class="item-title">
-      <div class="custom-tag">
+    <dt :class="`${axuiPrefix}card-header`">
+      <div :class="`${axuiPrefix}card-title-tag`">
         {{title}}
-        <Icon type="down" class="cardicon" :class="isFolded?'fold':''" @click="isFolded=!isFolded" />
+        <Icon
+          :class="[`${axuiPrefix}card-title-icon`]"
+          :style="{transform: `rotate(${isFolded?-90:0}deg)`}"
+          type="down"
+          @click="changeFold"
+        />
       </div>
     </dt>
-
-    <dd class="item-content" :class="isFolded?'hidecontent':''">
-      <slot></slot>
-    </dd>
+    <div
+      ref="content"
+      :class="[`${axuiPrefix}card-content`]"
+      :style="{height:isFolded?0:contentHeight+'px'}"
+    >
+      <dd style="padding: 1em 0 2em 2.5em;">
+        <slot></slot>
+      </dd>
+    </div>
   </div>
 </template>
 
@@ -22,56 +32,57 @@ export default {
   },
   data() {
     return {
-      isFolded: false
+      isFolded: false,
+      contentHeight: ""
     };
+  },
+  methods: {
+    changeFold() {
+      this.contentHeight = this.$refs.content.scrollHeight;
+      setTimeout(() => {
+        this.isFolded = !this.isFolded;
+      }, 30);
+    }
   }
 };
 </script>
 
 <style scoped lang="less">
 @import "../theme.less";
-.cardicon,
-.item-content {
+
+.@{ui-prefix}card-title-icon,
+.@{ui-prefix}card-content {
   transition: all @transition-time;
 }
 
-.cardicon {
+.@{ui-prefix}card-title-icon {
   display: inline-flex;
   vertical-align: middle;
   font-size: 0.75em;
   margin-left: 0.125em;
+  margin-bottom: 1px;
   cursor: pointer;
 }
-.cardicon.fold {
-  transform: rotate(-90deg);
-}
 
-.item-content {
-  padding: 1em 0 2em 2.5em;
+.@{ui-prefix}card-content {
   overflow: hidden;
 }
-.item-content.hidecontent {
-  height: 0;
 
-  padding: 0 0 0 2.5em;
-}
-
-@shadow-color: #aaa;
-
-.item-title {
+// ---------------------------------------
+.@{ui-prefix}card-header {
   display: flex;
 }
 
-.item-title::after {
+.@{ui-prefix}card-header::after {
   content: "";
   flex: 1;
 
   margin-top: calc(0.5em);
   height: 0px;
-  border-top: 0.1em solid @shadow-color;
+  border-top: 0.1em solid @mute-color;
 }
 
-.custom-tag {
+.@{ui-prefix}card-title-tag {
   display: inline-block;
   color: white;
   padding: 0.35em 1em;
@@ -80,8 +91,8 @@ export default {
   z-index: 5;
 }
 
-.custom-tag::before,
-.custom-tag::after {
+.@{ui-prefix}card-title-tag::before,
+.@{ui-prefix}card-title-tag::after {
   content: "";
   position: absolute;
   left: 0;
@@ -91,13 +102,13 @@ export default {
   border-radius: inherit;
 }
 
-.custom-tag::after {
+.@{ui-prefix}card-title-tag::after {
   z-index: -1;
   background: @primary-color;
 }
-.custom-tag::before {
+.@{ui-prefix}card-title-tag::before {
   z-index: -2;
-  background: @shadow-color;
+  background: @mute-color;
 
   transform: skew(-30deg);
   transform-origin: bottom right;

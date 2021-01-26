@@ -1,7 +1,7 @@
 <template>
   <i>
-    <svg class="svg" :viewBox="view">
-      <path class="svg" :d="path" />
+    <svg :class="`${axuiPrefix}svg`" :viewBox="view">
+      <path :d="path" />
     </svg>
   </i>
 </template>
@@ -31,8 +31,9 @@ export default {
 };
 </script>
 
-<style scoped>
-.svg {
+<style scoped lang='less'>
+@import '../theme.less';
+.@{ui-prefix}svg {
   width: 1em;
   height: 1em;
   line-height: 1em;

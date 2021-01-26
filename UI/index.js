@@ -13,6 +13,13 @@ export default {
      * @param {import('vue').App} app 
      */
     install(app) {
+        app.mixin({
+            data(){
+                return {
+                    axuiPrefix:'ax-'
+                }
+            }
+        })
         app.component('Button', Button)
         app.component('Icon', Icon)
         app.component('Card', Card)
