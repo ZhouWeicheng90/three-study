@@ -18,7 +18,6 @@
 @time-line-point-width: .25em;
 
 /* 
-    
     button按钮去掉了 size： 跟随font-size
     去掉了设置标签类型，直接继承button的type属性，设置按钮类型为submit，reset或button
     去掉了ghost，和buttonStyle为light时的效果一样
@@ -33,6 +32,10 @@
     // theme（实心，虚线，ios，md……）只有部分图标有实线风格，或双色风格。双色风格并不是传入两个颜色，其实是stroke的颜色，生成半透明的fill颜色
     // two-color 要做吗？
     // spin 旋转？ rotate 角度
+
+
+    ax- 公共前缀 没法统一，less是编译中的，window或css var是运行中，编译后的；只有一种方法，两者依赖一个js文件！
+    less主题也无法借助css变量进行，因为 lighten等hack函数，无法识别这样的颜色！（lighten函数不是动态的，是编译前的！）
 */
 
 

@@ -22,7 +22,7 @@ export default {
     type: {
       immediate: true,
       handler() {
-        let obj = Icons[this.type] || { path: "", view: "" };
+        let obj = Icons[this.type] || { path: "z", view: "0 0 1 1" };
         this.path = obj.path;
         this.view = obj.view;
       }

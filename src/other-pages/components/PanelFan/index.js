@@ -17,13 +17,25 @@ const component = {
     },
     setup(props, { emit }) {
         const step = ref(0)
+        let clickedFlag = false;
         function clickBlade(activeType, rotateCount) {
-            if ((rotateCount - 1) % 3 === 0) {
-                step.value--
-            } else if ((rotateCount + 1) % 3 === 0) {
-                step.value++;
+            if (clickedFlag) {
+                return;
             }
-            emit('activeChange', bladeTypes.indexOf(activeType));
+            clickedFlag = true;
+            setTimeout(() => {
+                clickedFlag = false;
+                // todo 这应该和 trasition time 一致
+            }, 300);
+
+            let direc = 0
+            if ((rotateCount - 1) % 3 === 0) {
+                direc = -1
+            } else if ((rotateCount + 1) % 3 === 0) {
+                direc = 1
+            }
+            emit('activeChange', bladeTypes.indexOf(activeType), direc);
+            step.value += direc
         }
 
         return () => (

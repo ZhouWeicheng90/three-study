@@ -1,6 +1,8 @@
 <template>
   <div :class="[`${axuiPrefix}time-line${finished?'-last':''}`]">
-    <slot></slot>
+    <div>
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -27,7 +29,7 @@ export default {
   position: relative;
 }
 .@{ui-prefix}time-line{
-  padding-bottom: 0.5em;
+  padding-bottom: .75em;
 }
 
 .@{ui-prefix}time-line::before,

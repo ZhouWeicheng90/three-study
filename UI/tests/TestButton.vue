@@ -1,6 +1,6 @@
 <template>
   <div class="options">
-    <div style="outline:1px solid red;height:2px;" class="bbb"></div>
+    <div style="outline:1px solid black;height:2px;" class="bbb"></div>
     <template v-for="clr in colors" :key="clr">
       <Button class="bbb"
         :color="clr"

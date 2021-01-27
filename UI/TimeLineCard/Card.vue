@@ -16,7 +16,7 @@
       :class="[`${axuiPrefix}card-content`]"
       :style="{height:isFolded?0:contentHeight+'px'}"
     >
-      <dd style="padding: 1em 0 2em 2.5em;">
+      <dd :class="`${axuiPrefix}card-inner`">
         <slot></slot>
       </dd>
     </div>
@@ -68,6 +68,10 @@ export default {
   overflow: hidden;
 }
 
+.@{ui-prefix}card-inner{
+   padding-top: .75em;
+   padding-left: 2.5em;
+}
 // ---------------------------------------
 .@{ui-prefix}card-header {
   display: flex;
