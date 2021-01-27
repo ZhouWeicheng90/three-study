@@ -13,7 +13,8 @@
       <div class="infoCard">标题三：内容</div>
     </Carousel>
     <Panel class="svg" :bladeTexts="texts" @activeChange="afterChange" />
-
+    <Button @click="$refs.carosel.previous()">《</Button>
+    <Button @click="$refs.carosel.next()">》</Button>
     <!-- <div>技术：js，css，html，vue……</div>
     <div>能力：擅长设计，让复杂系统更易维护；有多次重构的经验。</div>-->
   </div>

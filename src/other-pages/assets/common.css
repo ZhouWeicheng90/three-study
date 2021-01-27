@@ -18,8 +18,10 @@ span {
 .page {
     width           : 980px;
     max-width       : 100vw;
+    height: 1372px;
+
     /* max-height   : 1000px; */
-    box-shadow      : 0 -1px 0 0 #eee inset;
+    box-shadow      : 0 1px 0 0 red inset;
     padding         : 64px 80px;
     margin          : 0 auto;
 

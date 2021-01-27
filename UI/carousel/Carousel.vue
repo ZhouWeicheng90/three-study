@@ -17,11 +17,6 @@
 </template>
 
 <script>
-function raf(fn) {
-  requestAnimationFrame(() => {
-    requestAnimationFrame(fn);
-  });
-}
 export default {
   data() {
     return {
@@ -46,20 +41,22 @@ export default {
         }
         if (!this.stopAnimation) {
           this.stopAnimation = true;
-          raf(() => {
+          requestAnimationFrame(() => {
             resolve(this.transfer(dest));
           });
           return;
         }
         if (this.currentIndex !== dest) {
           this.currentIndex = dest;
-          raf(() => {
+          // 从上个条件过来，到这里currentIndex虽然改变了，但由于只是在raf中，没有进入vue的tick，所以vdom及dom没有变
+          // 而stopAnimation在上个raf中改变，并在上个tick中影响了dom
+          requestAnimationFrame(() => {
             resolve(this.transfer(dest));
           });
           return;
         }
         this.stopAnimation = false;
-        raf(resolve);
+        requestAnimationFrame(resolve);
       });
     },
     next() {
